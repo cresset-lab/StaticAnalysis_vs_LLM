@@ -1,0 +1,79 @@
+// https://community.openhab.org/t/owntracks-presence-detection-and-location-display-on-google-map-tutorial/38721
+
+var PointType becca_moving_location
+var PointType josh_moving_location
+
+var PointType home = new PointType("XX.571367,-XX.253829")//no spaces after comma
+
+rule "1 - Josh Moving switch on"
+when Item josh_moving received update ON
+then
+	josh_moving_location = locationJosh.state
+        logInfo("josh_moving_location updated","josh_moving_location set to" + josh_moving_location)
+end
+
+
+rule "2 - MqttPostionParseJosh"
+  when
+    Item mqttPositionJoshRaw changed
+  then
+    val String json = (mqttPositionJoshRaw.state as StringType).toString
+    val String type = transform("JSONPATH", "$._type", json)
+    if (type == "location") {
+      val String lat  = transform("JSONPATH", "$.lat", json)
+      val String lon  = transform("JSONPATH", "$.lon", json)
+      val String acc  = transform("JSONPATH", "$.acc", json)
+      val String batt = transform("JSONPATH", "$.batt", json)
+
+      postUpdate(mqttJoshLatitude,lat)
+      postUpdate(mqttJoshLongitude,lon)
+      locationJosh.postUpdate(new PointType(lat + "," + lon))
+      mqttJoshAccuracy.postUpdate(acc)
+      mqttJoshBattery.postUpdate(batt)
+	joshDistanceFromHome.postUpdate((home.distanceFrom(locationJosh.state))*0.000621)
+    }
+        if (josh_moving.state == ON){
+                if (josh_moving_location.distanceFrom(locationJosh.state) > 300){
+			pushover("Josh is on the move")
+                        postUpdate(josh_moving, OFF)
+                }
+        }
+end
+
+rule "3 - System Start"
+when
+        System started
+then
+        if(phone_Josh.state == ON){
+                postUpdate(josh, "Home")
+        }
+        else if (phone_Josh_Work.state == ON)
+                postUpdate(josh, "Work")
+        else postUpdate(josh, "Away")
+end
+
+rule "4 - Daddy's Home"
+when
+        Item phone_Josh changed from OFF to ON
+
+then
+        postUpdate(josh, "Home")
+end
+
+rule "5 - Josh leaves home"
+when Item phone_Josh received update OFF
+then
+        postUpdate(josh, "Away")
+end
+
+rule "6 - Josh gets to work"
+when Item phone_Josh_Work received update ON
+then postUpdate(josh, "Work")
+end
+
+rule "7 - Josh leaves work in Afternoon"
+when
+        Item phone_Josh_Work received update OFF
+then
+        postUpdate(josh, "Away")
+end

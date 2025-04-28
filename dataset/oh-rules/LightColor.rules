@@ -1,0 +1,52 @@
+// https://community.openhab.org/t/light-color-rgb-rgbw-rgbcw-to-and-from-hsb-dimmer-conversion/39132/1
+
+rule "RGBCW -> HSB+CW"
+when
+    Item Lamp_ColorRGBCWString received update
+then
+    var rgbcw = Lamp_ColorRGBCWString.state.toString
+    
+    var r = Integer::parseInt(rgbcw.substring(0, 2), 16)
+    var g = Integer::parseInt(rgbcw.substring(2, 4), 16)
+    var b = Integer::parseInt(rgbcw.substring(4, 6), 16)
+    //logInfo(filename, "Input Conversion: r" + r + " g" + g + " b" + b)
+    var HSBType hsb = HSBType.fromRGB(r, g, b)
+    //logInfo(filename, "Input Conversion: hsb" + hsb)
+    
+    var cw_dimm = Integer::parseInt(rgbcw.substring(6, 8), 16) * 100 / 255
+    var ww_dimm = Integer::parseInt(rgbcw.substring(8, 10), 16) * 100 / 255
+    //logInfo(filename, "Input Conversion: cw_dimm" + cw_dimm)
+    //logInfo(filename, "Input Conversion: ww_dimm" + ww_dimm)
+
+    Lamp_ColorHSB.postUpdate(hsb)
+    Lamp_CWDimmer.postUpdate(cw_dimm)
+    Lamp_WWDimmer.postUpdate(ww_dimm)
+end
+
+
+rule "HSB+CW -> RGBCW"
+when
+    Item Lamp_ColorHSB received command or
+    Item Lamp_CWDimmer received command or
+    Item Lamp_WWDimmer received command
+then
+    //logInfo(filename, "Command received: " + receivedCommand)
+    if (receivedCommand instanceof OnOffType) {
+        if (receivedCommand == ON) {
+            Lamp_Power.sendCommand(ON)
+        } else {
+            Lamp_Power.sendCommand(OFF)
+        }
+    return;
+    }
+    var r = ((Lamp_ColorHSB.state as HSBType).getRed * 255 / 100).intValue
+    var g = ((Lamp_ColorHSB.state as HSBType).getGreen * 255 / 100).intValue
+    var b = ((Lamp_ColorHSB.state as HSBType).getBlue * 255 / 100).intValue
+    var cw = ((Lamp_CWDimmer.state as Number) * 255 / 100).intValue
+    var ww = ((Lamp_WWDimmer.state as Number) * 255 / 100).intValue
+    //logInfo(filename, "Output Conversion: r" + r + " g" + g + " b" + b)
+    //logInfo(filename, "Output Conversion: cw" + cw + " ww" + ww)
+    var rgbcw = String.format("%02x%02x%02x%02x%02x", r, g, b, cw, ww)
+    //logInfo(filename, "Output Conversion: rgbcw" + rgbcw)
+    Lamp_ColorRGBCWString.sendCommand(rgbcw)
+end

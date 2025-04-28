@@ -1,0 +1,194 @@
+FILE: detect-output\oh-rules\WateringSystem.rules
+------------------------------------------------
+THREATS DETECTED: 6
+SAC: 0
+WAC: 6
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+1. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r7a7)
+    
+    RULES:
+        RULE_A [r1]: ("1 Watering_garden_startup")
+        RULE_B [r7]: ("7 Watering_starting/stoping")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r7t1]: Item notification_proxy_wtr received update
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r7c8]: if (msg == "START")
+                    AND [r7c9]: if (wtrfronttime > 0)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: wtrvalvefront.sendCommand(off_r)
+        ACTION_B:       [r7a7]: wtrvalvefront.sendCommand(on_r)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+2. WAC THREAT DETECTED
+    THREAT PAIR: (r1a2, r7a9)
+    
+    RULES:
+        RULE_A [r1]: ("1 Watering_garden_startup")
+        RULE_B [r7]: ("7 Watering_starting/stoping")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r7t1]: Item notification_proxy_wtr received update
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r7c8]: if (msg == "START")
+                    AND [r7c10]: if (wtrbacktime > 0)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a2]: wtrvalveback.sendCommand(off_r)
+        ACTION_B:       [r7a9]: wtrvalveback.sendCommand(on_r)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+3. WAC THREAT DETECTED
+    THREAT PAIR: (r1a3, r7a11)
+    
+    RULES:
+        RULE_A [r1]: ("1 Watering_garden_startup")
+        RULE_B [r7]: ("7 Watering_starting/stoping")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r7t1]: Item notification_proxy_wtr received update
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r7c8]: if (msg == "START")
+                    AND [r7c11]: if (wtrlinetime > 0)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a3]: wtrvalveline.sendCommand(off_r)
+        ACTION_B:       [r7a11]: wtrvalveline.sendCommand(on_r)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+4. WAC THREAT DETECTED
+    THREAT PAIR: (r2a1, r6a1)
+    
+    RULES:
+        RULE_A [r2]: ("2 Rain_sensor_rain_activated")
+        RULE_B [r6]: ("6 Watering_manual_start/stop")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Item rainsensor changed to open
+                    OR  [r2t2]: Item rainsensor changed to open 
+        
+        TRIGGERS_B:     [r6t1]: Item wtrstartbtn changed to closed
+                    OR  [r6t2]: Item wtrstartbtn changed to closed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r6c1]: if (iswatering == false)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r2a1]: notification_proxy_wtr.sendCommand("STOP")
+        ACTION_B:       [r6a1]: notification_proxy_wtr.sendCommand("START")
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+5. WAC THREAT DETECTED
+    THREAT PAIR: (r2a1, r8a3)
+    
+    RULES:
+        RULE_A [r2]: ("2 Rain_sensor_rain_activated")
+        RULE_B [r8]: ("8 Watering_algorithm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Item rainsensor changed to open
+                    OR  [r2t2]: Item rainsensor changed to open 
+        
+        TRIGGERS_B:     [r8t1]: Time cron 0 0 0/1 1/1 * ? *
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r8c1]: if (iswatering == false)
+                    AND [r8c4]: if (wtrauto == closed)
+                    AND [r8c5]: if (checkwtrrainsensor == false)
+                    AND [r8c8]: if (rainfallmm > minimumreqrainfall)
+                    AND [r8c12]: if (lastwtrdate.isbefore(now.minusdays(maxnowtrdays)) == 0)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r2a1]: notification_proxy_wtr.sendCommand("STOP")
+        ACTION_B:       [r8a3]: notification_proxy_wtr.sendCommand("START")
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+6. WAC THREAT DETECTED
+    THREAT PAIR: (r2a1, r8a4)
+    
+    RULES:
+        RULE_A [r2]: ("2 Rain_sensor_rain_activated")
+        RULE_B [r8]: ("8 Watering_algorithm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Item rainsensor changed to open
+                    OR  [r2t2]: Item rainsensor changed to open 
+        
+        TRIGGERS_B:     [r8t1]: Time cron 0 0 0/1 1/1 * ? *
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r8c1]: if (iswatering == false)
+                    AND [r8c4]: if (wtrauto == closed)
+                    AND [r8c5]: if (checkwtrrainsensor == false)
+                    AND [r8c10]: if (rainfallmm <= minimumreqrainfall)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r2a1]: notification_proxy_wtr.sendCommand("STOP")
+        ACTION_B:       [r8a4]: notification_proxy_wtr.sendCommand("START")
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+
+

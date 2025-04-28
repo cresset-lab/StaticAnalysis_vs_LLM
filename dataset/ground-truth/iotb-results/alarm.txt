@@ -1,0 +1,1277 @@
+FILE: detect-output\iotb-rules\alarm.rules
+------------------------------------------------
+THREATS DETECTED: 50
+SAC: 28
+WAC: 18
+STC: 0
+WTC: 0
+SCC: 1
+WCC: 3
+------------------------------------------------
+1. SAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a7)
+    
+    RULES:
+        RULE_A [r1]: ("Alarm reset at startup")
+        RULE_B [r2]: ("Reset all alarms")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Item salarm_reset changed to on
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: salarm_reset.sendCommand(on)
+        ACTION_B:       [r2a7]: salarm_reset.sendCommand(off)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+2. SAC THREAT DETECTED
+    THREAT PAIR: (r2a1, r9a5)
+    
+    RULES:
+        RULE_A [r2]: ("Reset all alarms")
+        RULE_B [r9]: ("Activate full alarm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Item salarm_reset changed to on 
+        
+        TRIGGERS_B:     [r9t1]: Item calarmactivation_full changed to open
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r2a1]: nsirens_generalmode.sendCommand(sirencontinuous)
+        ACTION_B:       [r9a5]: nsirens_generalmode.sendCommand(alarm)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+3. SAC THREAT DETECTED
+    THREAT PAIR: (r2a1, r11a5)
+    
+    RULES:
+        RULE_A [r2]: ("Reset all alarms")
+        RULE_B [r11]: ("Activate fire alarm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Item salarm_reset changed to on 
+        
+        TRIGGERS_B:     [r11t1]: Item calarmactivation_fire changed to open
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r2a1]: nsirens_generalmode.sendCommand(sirencontinuous)
+        ACTION_B:       [r11a5]: nsirens_generalmode.sendCommand(firealarm)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+4. SAC THREAT DETECTED
+    THREAT PAIR: (r2a1, r12a1)
+    
+    RULES:
+        RULE_A [r2]: ("Reset all alarms")
+        RULE_B [r12]: ("Alarms deactivated")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Item salarm_reset changed to on 
+        
+        TRIGGERS_B:     [r12t1]: Item cgalarmactivation changed to closed
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r2a1]: nsirens_generalmode.sendCommand(sirencontinuous)
+        ACTION_B:       [r12a1]: nsirens_generalmode.sendCommand(sirensoff)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+5. SAC THREAT DETECTED
+    THREAT PAIR: (r2a1, r14a3)
+    
+    RULES:
+        RULE_A [r2]: ("Reset all alarms")
+        RULE_B [r14]: ("Alarm sirens mode 1 - sirene setting")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Item salarm_reset changed to on 
+        
+        TRIGGERS_B:     [r14t1]: Item nsirens_generalmode received command 1
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r2a1]: nsirens_generalmode.sendCommand(sirencontinuous)
+        ACTION_B:       [r14a3]: nsirens_generalmode.sendCommand(sirensoff)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+6. SAC THREAT DETECTED
+    THREAT PAIR: (r2a1, r15a3)
+    
+    RULES:
+        RULE_A [r2]: ("Reset all alarms")
+        RULE_B [r15]: ("Alarm sirens mode 2 - sirene setting")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Item salarm_reset changed to on 
+        
+        TRIGGERS_B:     [r15t1]: Item nsirens_generalmode received command 2
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r2a1]: nsirens_generalmode.sendCommand(sirencontinuous)
+        ACTION_B:       [r15a3]: nsirens_generalmode.sendCommand(sirensoff)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+7. SAC THREAT DETECTED
+    THREAT PAIR: (r2a1, r16a3)
+    
+    RULES:
+        RULE_A [r2]: ("Reset all alarms")
+        RULE_B [r16]: ("Alarm sirens mode 3 - sirene setting")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Item salarm_reset changed to on 
+        
+        TRIGGERS_B:     [r16t1]: Item nsirens_generalmode received command 3
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r2a1]: nsirens_generalmode.sendCommand(sirencontinuous)
+        ACTION_B:       [r16a3]: nsirens_generalmode.sendCommand(sirensoff)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+8. SAC THREAT DETECTED
+    THREAT PAIR: (r2a1, r17a3)
+    
+    RULES:
+        RULE_A [r2]: ("Reset all alarms")
+        RULE_B [r17]: ("Alarm sirens mode 4 - sirene setting")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Item salarm_reset changed to on 
+        
+        TRIGGERS_B:     [r17t1]: Item nsirens_generalmode received command 4
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r2a1]: nsirens_generalmode.sendCommand(sirencontinuous)
+        ACTION_B:       [r17a3]: nsirens_generalmode.sendCommand(sirensoff)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+9. SAC THREAT DETECTED
+    THREAT PAIR: (r2a1, r18a3)
+    
+    RULES:
+        RULE_A [r2]: ("Reset all alarms")
+        RULE_B [r18]: ("Alarm sirens mode 5 - sirene setting")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Item salarm_reset changed to on 
+        
+        TRIGGERS_B:     [r18t1]: Item nsirens_generalmode received command 5
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r2a1]: nsirens_generalmode.sendCommand(sirencontinuous)
+        ACTION_B:       [r18a3]: nsirens_generalmode.sendCommand(sirensoff)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+10. SAC THREAT DETECTED
+    THREAT PAIR: (r3a1, r9a1)
+    
+    RULES:
+        RULE_A [r3]: ("Presence after alarm reset")
+        RULE_B [r9]: ("Activate full alarm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r3t1]: Item cgalarmactivation changed to closed 
+        
+        TRIGGERS_B:     [r9t1]: Item calarmactivation_full changed to open
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r3a1]: nstatus_presence.postUpdate(unknown)
+        ACTION_B:       [r9a1]: nstatus_presence.postUpdate(alarm)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+11. SAC THREAT DETECTED
+    THREAT PAIR: (r3a1, r11a1)
+    
+    RULES:
+        RULE_A [r3]: ("Presence after alarm reset")
+        RULE_B [r11]: ("Activate fire alarm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r3t1]: Item cgalarmactivation changed to closed 
+        
+        TRIGGERS_B:     [r11t1]: Item calarmactivation_fire changed to open
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r3a1]: nstatus_presence.postUpdate(unknown)
+        ACTION_B:       [r11a1]: nstatus_presence.postUpdate(fire)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+12. SAC THREAT DETECTED
+    THREAT PAIR: (r9a1, r11a1)
+    
+    RULES:
+        RULE_A [r9]: ("Activate full alarm")
+        RULE_B [r11]: ("Activate fire alarm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r9t1]: Item calarmactivation_full changed to open 
+        
+        TRIGGERS_B:     [r11t1]: Item calarmactivation_fire changed to open
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r9a1]: nstatus_presence.postUpdate(alarm)
+        ACTION_B:       [r11a1]: nstatus_presence.postUpdate(fire)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+13. SAC THREAT DETECTED
+    THREAT PAIR: (r9a4, r11a4)
+    
+    RULES:
+        RULE_A [r9]: ("Activate full alarm")
+        RULE_B [r11]: ("Activate fire alarm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r9t1]: Item calarmactivation_full changed to open 
+        
+        TRIGGERS_B:     [r11t1]: Item calarmactivation_fire changed to open
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r9a4]: strlastalarmtype.postUpdate("Inbraakalarm")
+        ACTION_B:       [r11a4]: strlastalarmtype.postUpdate("Brandalarm")
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+14. SAC THREAT DETECTED
+    THREAT PAIR: (r9a5, r11a5)
+    
+    RULES:
+        RULE_A [r9]: ("Activate full alarm")
+        RULE_B [r11]: ("Activate fire alarm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r9t1]: Item calarmactivation_full changed to open 
+        
+        TRIGGERS_B:     [r11t1]: Item calarmactivation_fire changed to open
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r9a5]: nsirens_generalmode.sendCommand(alarm)
+        ACTION_B:       [r11a5]: nsirens_generalmode.sendCommand(firealarm)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+15. SAC THREAT DETECTED
+    THREAT PAIR: (r9a5, r12a1)
+    
+    RULES:
+        RULE_A [r9]: ("Activate full alarm")
+        RULE_B [r12]: ("Alarms deactivated")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r9t1]: Item calarmactivation_full changed to open 
+        
+        TRIGGERS_B:     [r12t1]: Item cgalarmactivation changed to closed
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r9a5]: nsirens_generalmode.sendCommand(alarm)
+        ACTION_B:       [r12a1]: nsirens_generalmode.sendCommand(sirensoff)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+16. SAC THREAT DETECTED
+    THREAT PAIR: (r9a5, r14a3)
+    
+    RULES:
+        RULE_A [r9]: ("Activate full alarm")
+        RULE_B [r14]: ("Alarm sirens mode 1 - sirene setting")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r9t1]: Item calarmactivation_full changed to open 
+        
+        TRIGGERS_B:     [r14t1]: Item nsirens_generalmode received command 1
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r9a5]: nsirens_generalmode.sendCommand(alarm)
+        ACTION_B:       [r14a3]: nsirens_generalmode.sendCommand(sirensoff)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+17. SAC THREAT DETECTED
+    THREAT PAIR: (r9a5, r15a3)
+    
+    RULES:
+        RULE_A [r9]: ("Activate full alarm")
+        RULE_B [r15]: ("Alarm sirens mode 2 - sirene setting")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r9t1]: Item calarmactivation_full changed to open 
+        
+        TRIGGERS_B:     [r15t1]: Item nsirens_generalmode received command 2
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r9a5]: nsirens_generalmode.sendCommand(alarm)
+        ACTION_B:       [r15a3]: nsirens_generalmode.sendCommand(sirensoff)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+18. SAC THREAT DETECTED
+    THREAT PAIR: (r9a5, r16a3)
+    
+    RULES:
+        RULE_A [r9]: ("Activate full alarm")
+        RULE_B [r16]: ("Alarm sirens mode 3 - sirene setting")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r9t1]: Item calarmactivation_full changed to open 
+        
+        TRIGGERS_B:     [r16t1]: Item nsirens_generalmode received command 3
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r9a5]: nsirens_generalmode.sendCommand(alarm)
+        ACTION_B:       [r16a3]: nsirens_generalmode.sendCommand(sirensoff)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+19. SAC THREAT DETECTED
+    THREAT PAIR: (r9a5, r17a3)
+    
+    RULES:
+        RULE_A [r9]: ("Activate full alarm")
+        RULE_B [r17]: ("Alarm sirens mode 4 - sirene setting")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r9t1]: Item calarmactivation_full changed to open 
+        
+        TRIGGERS_B:     [r17t1]: Item nsirens_generalmode received command 4
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r9a5]: nsirens_generalmode.sendCommand(alarm)
+        ACTION_B:       [r17a3]: nsirens_generalmode.sendCommand(sirensoff)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+20. SAC THREAT DETECTED
+    THREAT PAIR: (r9a5, r18a3)
+    
+    RULES:
+        RULE_A [r9]: ("Activate full alarm")
+        RULE_B [r18]: ("Alarm sirens mode 5 - sirene setting")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r9t1]: Item calarmactivation_full changed to open 
+        
+        TRIGGERS_B:     [r18t1]: Item nsirens_generalmode received command 5
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r9a5]: nsirens_generalmode.sendCommand(alarm)
+        ACTION_B:       [r18a3]: nsirens_generalmode.sendCommand(sirensoff)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+21. SAC THREAT DETECTED
+    THREAT PAIR: (r9a6, r11a6)
+    
+    RULES:
+        RULE_A [r9]: ("Activate full alarm")
+        RULE_B [r11]: ("Activate fire alarm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r9t1]: Item calarmactivation_full changed to open 
+        
+        TRIGGERS_B:     [r11t1]: Item calarmactivation_fire changed to open
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r9a6]: nscene_gf_lights.sendCommand(alarm)
+        ACTION_B:       [r11a6]: nscene_gf_lights.sendCommand(firealarm)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+22. SAC THREAT DETECTED
+    THREAT PAIR: (r9a7, r11a7)
+    
+    RULES:
+        RULE_A [r9]: ("Activate full alarm")
+        RULE_B [r11]: ("Activate fire alarm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r9t1]: Item calarmactivation_full changed to open 
+        
+        TRIGGERS_B:     [r11t1]: Item calarmactivation_fire changed to open
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r9a7]: nscene_ff_lights.sendCommand(alarm)
+        ACTION_B:       [r11a7]: nscene_ff_lights.sendCommand(firealarm)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+23. SAC THREAT DETECTED
+    THREAT PAIR: (r11a5, r12a1)
+    
+    RULES:
+        RULE_A [r11]: ("Activate fire alarm")
+        RULE_B [r12]: ("Alarms deactivated")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r11t1]: Item calarmactivation_fire changed to open 
+        
+        TRIGGERS_B:     [r12t1]: Item cgalarmactivation changed to closed
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r11a5]: nsirens_generalmode.sendCommand(firealarm)
+        ACTION_B:       [r12a1]: nsirens_generalmode.sendCommand(sirensoff)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+24. SAC THREAT DETECTED
+    THREAT PAIR: (r11a5, r14a3)
+    
+    RULES:
+        RULE_A [r11]: ("Activate fire alarm")
+        RULE_B [r14]: ("Alarm sirens mode 1 - sirene setting")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r11t1]: Item calarmactivation_fire changed to open 
+        
+        TRIGGERS_B:     [r14t1]: Item nsirens_generalmode received command 1
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r11a5]: nsirens_generalmode.sendCommand(firealarm)
+        ACTION_B:       [r14a3]: nsirens_generalmode.sendCommand(sirensoff)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+25. SAC THREAT DETECTED
+    THREAT PAIR: (r11a5, r15a3)
+    
+    RULES:
+        RULE_A [r11]: ("Activate fire alarm")
+        RULE_B [r15]: ("Alarm sirens mode 2 - sirene setting")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r11t1]: Item calarmactivation_fire changed to open 
+        
+        TRIGGERS_B:     [r15t1]: Item nsirens_generalmode received command 2
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r11a5]: nsirens_generalmode.sendCommand(firealarm)
+        ACTION_B:       [r15a3]: nsirens_generalmode.sendCommand(sirensoff)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+26. SAC THREAT DETECTED
+    THREAT PAIR: (r11a5, r16a3)
+    
+    RULES:
+        RULE_A [r11]: ("Activate fire alarm")
+        RULE_B [r16]: ("Alarm sirens mode 3 - sirene setting")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r11t1]: Item calarmactivation_fire changed to open 
+        
+        TRIGGERS_B:     [r16t1]: Item nsirens_generalmode received command 3
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r11a5]: nsirens_generalmode.sendCommand(firealarm)
+        ACTION_B:       [r16a3]: nsirens_generalmode.sendCommand(sirensoff)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+27. SAC THREAT DETECTED
+    THREAT PAIR: (r11a5, r17a3)
+    
+    RULES:
+        RULE_A [r11]: ("Activate fire alarm")
+        RULE_B [r17]: ("Alarm sirens mode 4 - sirene setting")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r11t1]: Item calarmactivation_fire changed to open 
+        
+        TRIGGERS_B:     [r17t1]: Item nsirens_generalmode received command 4
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r11a5]: nsirens_generalmode.sendCommand(firealarm)
+        ACTION_B:       [r17a3]: nsirens_generalmode.sendCommand(sirensoff)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+28. SAC THREAT DETECTED
+    THREAT PAIR: (r11a5, r18a3)
+    
+    RULES:
+        RULE_A [r11]: ("Activate fire alarm")
+        RULE_B [r18]: ("Alarm sirens mode 5 - sirene setting")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r11t1]: Item calarmactivation_fire changed to open 
+        
+        TRIGGERS_B:     [r18t1]: Item nsirens_generalmode received command 5
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r11a5]: nsirens_generalmode.sendCommand(firealarm)
+        ACTION_B:       [r18a3]: nsirens_generalmode.sendCommand(sirensoff)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+29. WAC THREAT DETECTED
+    THREAT PAIR: (r2a1, r10a5)
+    
+    RULES:
+        RULE_A [r2]: ("Reset all alarms")
+        RULE_B [r10]: ("Activate night alarm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Item salarm_reset changed to on 
+        
+        TRIGGERS_B:     [r10t1]: Item calarmactivation_night changed to open
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r10c1]: if (snight == on)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r2a1]: nsirens_generalmode.sendCommand(sirencontinuous)
+        ACTION_B:       [r10a5]: nsirens_generalmode.sendCommand(nightalarm)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+30. WAC THREAT DETECTED
+    THREAT PAIR: (r2a3, r7a1)
+    
+    RULES:
+        RULE_A [r2]: ("Reset all alarms")
+        RULE_B [r7]: ("Auto turn on night alarm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Item salarm_reset changed to on 
+        
+        TRIGGERS_B:     [r7t1]: Item nstatus_presence changed to 5
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r7c1]: if (salarm_night_auto == on)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r2a3]: salarm_night.sendCommand(off)
+        ACTION_B:       [r7a1]: salarm_night.sendCommand(on)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+31. WAC THREAT DETECTED
+    THREAT PAIR: (r3a1, r10a1)
+    
+    RULES:
+        RULE_A [r3]: ("Presence after alarm reset")
+        RULE_B [r10]: ("Activate night alarm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r3t1]: Item cgalarmactivation changed to closed 
+        
+        TRIGGERS_B:     [r10t1]: Item calarmactivation_night changed to open
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r10c1]: if (snight == on)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r3a1]: nstatus_presence.postUpdate(unknown)
+        ACTION_B:       [r10a1]: nstatus_presence.postUpdate(alarm)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+32. WAC THREAT DETECTED
+    THREAT PAIR: (r9a4, r10a4)
+    
+    RULES:
+        RULE_A [r9]: ("Activate full alarm")
+        RULE_B [r10]: ("Activate night alarm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r9t1]: Item calarmactivation_full changed to open 
+        
+        TRIGGERS_B:     [r10t1]: Item calarmactivation_night changed to open
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r10c1]: if (snight == on)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r9a4]: strlastalarmtype.postUpdate("Inbraakalarm")
+        ACTION_B:       [r10a4]: strlastalarmtype.postUpdate("Nachtalarm")
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+33. WAC THREAT DETECTED
+    THREAT PAIR: (r9a5, r10a5)
+    
+    RULES:
+        RULE_A [r9]: ("Activate full alarm")
+        RULE_B [r10]: ("Activate night alarm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r9t1]: Item calarmactivation_full changed to open 
+        
+        TRIGGERS_B:     [r10t1]: Item calarmactivation_night changed to open
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r10c1]: if (snight == on)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r9a5]: nsirens_generalmode.sendCommand(alarm)
+        ACTION_B:       [r10a5]: nsirens_generalmode.sendCommand(nightalarm)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+34. WAC THREAT DETECTED
+    THREAT PAIR: (r9a6, r10a6)
+    
+    RULES:
+        RULE_A [r9]: ("Activate full alarm")
+        RULE_B [r10]: ("Activate night alarm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r9t1]: Item calarmactivation_full changed to open 
+        
+        TRIGGERS_B:     [r10t1]: Item calarmactivation_night changed to open
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r10c1]: if (snight == on)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r9a6]: nscene_gf_lights.sendCommand(alarm)
+        ACTION_B:       [r10a6]: nscene_gf_lights.sendCommand(nightalarm)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+35. WAC THREAT DETECTED
+    THREAT PAIR: (r9a7, r10a7)
+    
+    RULES:
+        RULE_A [r9]: ("Activate full alarm")
+        RULE_B [r10]: ("Activate night alarm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r9t1]: Item calarmactivation_full changed to open 
+        
+        TRIGGERS_B:     [r10t1]: Item calarmactivation_night changed to open
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r10c1]: if (snight == on)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r9a7]: nscene_ff_lights.sendCommand(alarm)
+        ACTION_B:       [r10a7]: nscene_ff_lights.sendCommand(nightalarm)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+36. WAC THREAT DETECTED
+    THREAT PAIR: (r10a1, r11a1)
+    
+    RULES:
+        RULE_A [r10]: ("Activate night alarm")
+        RULE_B [r11]: ("Activate fire alarm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r10t1]: Item calarmactivation_night changed to open 
+        
+        TRIGGERS_B:     [r11t1]: Item calarmactivation_fire changed to open
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r10c1]: if (snight == on) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r10a1]: nstatus_presence.postUpdate(alarm)
+        ACTION_B:       [r11a1]: nstatus_presence.postUpdate(fire)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+37. WAC THREAT DETECTED
+    THREAT PAIR: (r10a4, r11a4)
+    
+    RULES:
+        RULE_A [r10]: ("Activate night alarm")
+        RULE_B [r11]: ("Activate fire alarm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r10t1]: Item calarmactivation_night changed to open 
+        
+        TRIGGERS_B:     [r11t1]: Item calarmactivation_fire changed to open
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r10c1]: if (snight == on) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r10a4]: strlastalarmtype.postUpdate("Nachtalarm")
+        ACTION_B:       [r11a4]: strlastalarmtype.postUpdate("Brandalarm")
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+38. WAC THREAT DETECTED
+    THREAT PAIR: (r10a5, r11a5)
+    
+    RULES:
+        RULE_A [r10]: ("Activate night alarm")
+        RULE_B [r11]: ("Activate fire alarm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r10t1]: Item calarmactivation_night changed to open 
+        
+        TRIGGERS_B:     [r11t1]: Item calarmactivation_fire changed to open
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r10c1]: if (snight == on) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r10a5]: nsirens_generalmode.sendCommand(nightalarm)
+        ACTION_B:       [r11a5]: nsirens_generalmode.sendCommand(firealarm)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+39. WAC THREAT DETECTED
+    THREAT PAIR: (r10a5, r12a1)
+    
+    RULES:
+        RULE_A [r10]: ("Activate night alarm")
+        RULE_B [r12]: ("Alarms deactivated")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r10t1]: Item calarmactivation_night changed to open 
+        
+        TRIGGERS_B:     [r12t1]: Item cgalarmactivation changed to closed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r10c1]: if (snight == on) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r10a5]: nsirens_generalmode.sendCommand(nightalarm)
+        ACTION_B:       [r12a1]: nsirens_generalmode.sendCommand(sirensoff)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+40. WAC THREAT DETECTED
+    THREAT PAIR: (r10a5, r14a3)
+    
+    RULES:
+        RULE_A [r10]: ("Activate night alarm")
+        RULE_B [r14]: ("Alarm sirens mode 1 - sirene setting")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r10t1]: Item calarmactivation_night changed to open 
+        
+        TRIGGERS_B:     [r14t1]: Item nsirens_generalmode received command 1
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r10c1]: if (snight == on) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r10a5]: nsirens_generalmode.sendCommand(nightalarm)
+        ACTION_B:       [r14a3]: nsirens_generalmode.sendCommand(sirensoff)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+41. WAC THREAT DETECTED
+    THREAT PAIR: (r10a5, r15a3)
+    
+    RULES:
+        RULE_A [r10]: ("Activate night alarm")
+        RULE_B [r15]: ("Alarm sirens mode 2 - sirene setting")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r10t1]: Item calarmactivation_night changed to open 
+        
+        TRIGGERS_B:     [r15t1]: Item nsirens_generalmode received command 2
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r10c1]: if (snight == on) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r10a5]: nsirens_generalmode.sendCommand(nightalarm)
+        ACTION_B:       [r15a3]: nsirens_generalmode.sendCommand(sirensoff)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+42. WAC THREAT DETECTED
+    THREAT PAIR: (r10a5, r16a3)
+    
+    RULES:
+        RULE_A [r10]: ("Activate night alarm")
+        RULE_B [r16]: ("Alarm sirens mode 3 - sirene setting")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r10t1]: Item calarmactivation_night changed to open 
+        
+        TRIGGERS_B:     [r16t1]: Item nsirens_generalmode received command 3
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r10c1]: if (snight == on) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r10a5]: nsirens_generalmode.sendCommand(nightalarm)
+        ACTION_B:       [r16a3]: nsirens_generalmode.sendCommand(sirensoff)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+43. WAC THREAT DETECTED
+    THREAT PAIR: (r10a5, r17a3)
+    
+    RULES:
+        RULE_A [r10]: ("Activate night alarm")
+        RULE_B [r17]: ("Alarm sirens mode 4 - sirene setting")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r10t1]: Item calarmactivation_night changed to open 
+        
+        TRIGGERS_B:     [r17t1]: Item nsirens_generalmode received command 4
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r10c1]: if (snight == on) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r10a5]: nsirens_generalmode.sendCommand(nightalarm)
+        ACTION_B:       [r17a3]: nsirens_generalmode.sendCommand(sirensoff)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+44. WAC THREAT DETECTED
+    THREAT PAIR: (r10a5, r18a3)
+    
+    RULES:
+        RULE_A [r10]: ("Activate night alarm")
+        RULE_B [r18]: ("Alarm sirens mode 5 - sirene setting")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r10t1]: Item calarmactivation_night changed to open 
+        
+        TRIGGERS_B:     [r18t1]: Item nsirens_generalmode received command 5
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r10c1]: if (snight == on) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r10a5]: nsirens_generalmode.sendCommand(nightalarm)
+        ACTION_B:       [r18a3]: nsirens_generalmode.sendCommand(sirensoff)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+45. WAC THREAT DETECTED
+    THREAT PAIR: (r10a6, r11a6)
+    
+    RULES:
+        RULE_A [r10]: ("Activate night alarm")
+        RULE_B [r11]: ("Activate fire alarm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r10t1]: Item calarmactivation_night changed to open 
+        
+        TRIGGERS_B:     [r11t1]: Item calarmactivation_fire changed to open
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r10c1]: if (snight == on) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r10a6]: nscene_gf_lights.sendCommand(nightalarm)
+        ACTION_B:       [r11a6]: nscene_gf_lights.sendCommand(firealarm)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+46. WAC THREAT DETECTED
+    THREAT PAIR: (r10a7, r11a7)
+    
+    RULES:
+        RULE_A [r10]: ("Activate night alarm")
+        RULE_B [r11]: ("Activate fire alarm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r10t1]: Item calarmactivation_night changed to open 
+        
+        TRIGGERS_B:     [r11t1]: Item calarmactivation_fire changed to open
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r10c1]: if (snight == on) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r10a7]: nscene_ff_lights.sendCommand(nightalarm)
+        ACTION_B:       [r11a7]: nscene_ff_lights.sendCommand(firealarm)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+52. SCC THREAT DETECTED
+    THREAT PAIR: (r2a4, r7c1)
+
+    RULES:
+        RULE_A:         [r2]: ("Reset all alarms")
+        RULE_B:         [r7]: ("Auto turn on night alarm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Item salarm_reset changed to on 
+        
+        TRIGGERS_B:     [r7t1]: Item nstatus_presence changed to 5
+
+    GUARDING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+
+    CONDITION-ACTION PAIR:
+        ACTION_A:       [r2a4]: salarm_night_auto.sendCommand(on) 
+
+        CONDITIONS_B:   [r7c1]: if (salarm_night_auto == on) 
+
+    RESULTING ACTION:
+        ACTION_B:       [r7a1]: salarm_night.sendCommand(on) 
+
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    WHILE GUARDING CONDITIONS ARE ENABLED
+    THE CONDITION-ACTION PAIR
+    WILL CAUSE A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+
+53. WCC THREAT DETECTED
+    THREAT PAIR: (r2a4, r8c3)
+
+    RULES:
+        RULE_A:         [r2]: ("Reset all alarms")
+        RULE_B:         [r8]: ("Auto turn off night alarm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Item salarm_reset changed to on 
+        
+        TRIGGERS_B:     [r8t1]: Item nstatus_presence changed to 3
+
+    GUARDING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+
+    CONDITION-ACTION PAIR:
+        ACTION_A:       [r2a4]: salarm_night_auto.sendCommand(on) 
+
+        CONDITION_B:     [r8c3]: if (salarm_night_auto == on)
+
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    WHILE GUARDING CONDITIONS ARE ENABLED
+    THE CONDITION-ACTION PAIR
+    MAY CAUSE UNEXPECTED BEHAVIOUR.
+
+------------------------------------------------
+
+54. WCC THREAT DETECTED
+    THREAT PAIR: (r5a1, r8c1)
+
+    RULES:
+        RULE_A:         [r5]: ("Reset night alarm")
+        RULE_B:         [r8]: ("Auto turn off night alarm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r5t1]: Item salarm_night changed to off 
+        
+        TRIGGERS_B:     [r8t1]: Item nstatus_presence changed to 3
+
+    GUARDING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+
+    CONDITION-ACTION PAIR:
+        ACTION_A:       [r5a1]: calarmactivation_night.postUpdate(closed) 
+
+        CONDITION_B:     [r8c1]: if (calarmactivation_night != open)
+
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    WHILE GUARDING CONDITIONS ARE ENABLED
+    THE CONDITION-ACTION PAIR
+    MAY CAUSE UNEXPECTED BEHAVIOUR.
+
+------------------------------------------------
+
+55. WCC THREAT DETECTED
+    THREAT PAIR: (r10a8, r8c1)
+
+    RULES:
+        RULE_A:         [r10]: ("Activate night alarm")
+        RULE_B:         [r8]: ("Auto turn off night alarm")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r10t1]: Item calarmactivation_night changed to open 
+        
+        TRIGGERS_B:     [r8t1]: Item nstatus_presence changed to 3
+
+    GUARDING CONDITIONS:
+        CONDITIONS_A:   [r10c2]: if (snight != on) 
+
+    CONDITION-ACTION PAIR:
+        ACTION_A:       [r10a8]: calarmactivation_night.postUpdate(closed) 
+
+        CONDITION_B:     [r8c1]: if (calarmactivation_night != open)
+
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    WHILE GUARDING CONDITIONS ARE ENABLED
+    THE CONDITION-ACTION PAIR
+    MAY CAUSE UNEXPECTED BEHAVIOUR.
+
+------------------------------------------------
+

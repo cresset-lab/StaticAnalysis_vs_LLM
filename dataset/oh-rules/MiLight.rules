@@ -1,0 +1,78 @@
+// https://community.openhab.org/t/use-esp8266-to-control-unlimited-groups-of-milight-or-limitless-led-bulbs-in-openhab2/34906
+
+rule "1 - Milight_ID1_G1_ONOFF"
+  when
+	Item Milight_ID1_G1_State received command
+  then
+	Milight_ID1_G1_Light.sendCommand('{"state":"'+receivedCommand+'"}')
+end
+
+
+rule "2 - Milight_ID1_G1_BRIGHT"
+  when
+	Item Milight_ID1_G1_Brightness received command
+  then
+	var iLEVEL = (receivedCommand as PercentType).intValue
+	
+	if(Milight_ID1_G1_State.state==OFF) // Needed to keep openhab up to date if incoming MQTT is disabled.
+		Milight_ID1_G1_State.postUpdate(ON)
+
+	Milight_ID1_G1_Light.sendCommand('{"state":"ON","level":'+iLEVEL+'}') // Using level means values from 0 to 100 and not 0-255
+end
+
+
+rule "3 - Milight_ID1_G1_CT"
+  when
+	Item Milight_ID1_G1_CTemp received command
+  then
+	var iVAL = (receivedCommand as DecimalType).intValue
+	var iCTEMP = (370-(2.17*iVAL)).intValue // Scale values to range from 370 to 153
+	
+	if(Milight_ID1_G1_State.state==OFF) // Needed to keep openhab up to date if incoming MQTT is disabled.
+		Milight_ID1_G1_State.postUpdate(ON)
+
+    Milight_ID1_G1_Light.sendCommand('{"state":"ON","color_temp":'+iCTEMP+'}')
+end
+
+
+rule "4 - Milight_ID1_G1_HUE"
+  when
+	Item Milight_ID1_G1_Hue received command
+  then
+	var iHUE 	= Math::round((receivedCommand as HSBType).getHue.intValue)
+	var iSAT 	= Math::round((receivedCommand as HSBType).getSaturation.intValue)
+	var iLEVEL 	= Math::round((receivedCommand as HSBType).getBrightness.intValue)
+	Milight_ID1_G1_Light.sendCommand('{"state":"ON","level":'+iLEVEL+',"hue":'+iHUE+',"saturation":'+iSAT+'}')
+end
+
+// Rule for updating controls in Openhab when a milight remote is used //
+// Only use postUpdate in here to prevent Openhab sending a command in response and causing pot. feedback//
+rule "5 - Milight_ID1_G1_HubStates"
+  when
+	Item Milight_ID1_G1_EspMilightHub changed
+  then
+	var sJSONBLOB = Milight_ID1_G1_EspMilightHub.state.toString
+	var sMODE =	transform("JSONPATH","$.bulb_mode", sJSONBLOB)
+	var sSTATE=	transform("JSONPATH","$.state", sJSONBLOB)
+	var sLEVEL=	transform("JSONPATH","$.level", sJSONBLOB)
+	var Number iLEVEL= Integer::parseInt(sLEVEL).intValue //convert the string to an int.
+	
+	if(Milight_ID1_G1_State.state!=sSTATE)
+	Milight_ID1_G1_State.postUpdate(sSTATE)
+	
+	if(sMODE=="white") // Code to handle a white JSON blob
+	{
+		var sCTEMP=transform("JSONPATH","$.color_temp", sJSONBLOB)
+		var iTempScaled=(((Integer::parseInt(sCTEMP)/2.17)-171)*-1).intValue //Dirty but seems to work. Converts string to int and scale range.
+		Milight_ID1_G1_CTemp.postUpdate(iTempScaled) //send CT to globe
+		Milight_ID1_G1_Brightness.postUpdate(iLEVEL) //send new brightness to globe
+	}
+	
+	else if(sMODE=="color") // Code to handle a colour JSON blob
+	{		
+		var String sHUE			= transform("JSONPATH","$.hue", sJSONBLOB)
+		var String sSATURATION	= transform("JSONPATH","$.saturation", sJSONBLOB)
+		Milight_ID1_G1_Brightness.postUpdate(iLEVEL) 	//update main dimmer item
+		Milight_ID1_G1_Hue.postUpdate(sHUE+","+sSATURATION+","+sLEVEL)		//update color item      
+	}
+end

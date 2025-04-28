@@ -1,0 +1,39 @@
+FILE: detect-output\iotb-rules\lightonsunset.rules
+------------------------------------------------
+THREATS DETECTED: 1
+SAC: 0
+WAC: 1
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+1. WAC THREAT DETECTED
+    THREAT PAIR: (r3a1, r4a1)
+    
+    RULES:
+        RULE_A [r3]: ("lights_on_sunset")
+        RULE_B [r4]: ("harmony_off_lights_off")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r3t1]: Time cron 0/30 * * * * ? 
+        
+        TRIGGERS_B:     [r4t1]: Item harmonyhub_currentactivity changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r3c1]: if (cdm == lodm)
+                    AND [r3c2]: if (cdh == lodh) 
+        
+        CONDITIONS_B:   [r4c1]: if (curr_state == "PowerOff")
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r3a1]: living_room_light.sendCommand(light_on)
+        ACTION_B:       [r4a1]: living_room_light.sendCommand(light_off)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+

@@ -1,0 +1,33 @@
+FILE: detect-output\oh-rules\Doorbell.rules
+------------------------------------------------
+THREATS DETECTED: 1
+SAC: 1
+WAC: 0
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+1. SAC THREAT DETECTED
+    THREAT PAIR: (r1a3, r2a1)
+    
+    RULES:
+        RULE_A [r1]: ("Auto Front Doorbell")
+        RULE_B [r2]: ("Send doorbell GIF to HomeHub and Pushover")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item doorbell_piralarm changed to on 
+        
+        TRIGGERS_B:     [r2t1]: Item doorbell_recordinggif changed to 0
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a3]: kitchenhomehubplayuri.sendCommand("http://192.168.1.2:8080/static/doorbell.mp3")
+        ACTION_B:       [r2a1]: kitchenhomehubplayuri.sendCommand("http://192.168.1.2:54321/ipcamera.gif")
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+

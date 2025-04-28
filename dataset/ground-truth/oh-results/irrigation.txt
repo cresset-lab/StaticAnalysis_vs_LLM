@@ -1,0 +1,275 @@
+FILE: detect-output\oh-rules\irrigation.rules
+------------------------------------------------
+THREATS DETECTED: 10
+SAC: 3
+WAC: 7
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+1. SAC THREAT DETECTED
+    THREAT PAIR: (r1a13, r2a3)
+    
+    RULES:
+        RULE_A [r1]: ("1 Irrigation - system start")
+        RULE_B [r2]: ("2 - Irrigation - calculate whether to start watering")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Time cron 0 * * ? * *
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a13]: irrigationcurrentvalve.postUpdate(off)
+        ACTION_B:       [r2a3]: irrigationcurrentvalve.sendCommand(irrigationvalvezone1.name)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+2. SAC THREAT DETECTED
+    THREAT PAIR: (r2a3, r5a1)
+    
+    RULES:
+        RULE_A [r2]: ("2 - Irrigation - calculate whether to start watering")
+        RULE_B [r5]: ("5 - Irrigation - all valves closed")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Time cron 0 * * ? * * 
+        
+        TRIGGERS_B:     [r5t1]: Item groupirrigationvalves changed to off
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r2a3]: irrigationcurrentvalve.sendCommand(irrigationvalvezone1.name)
+        ACTION_B:       [r5a1]: irrigationcurrentvalve.postUpdate(off)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+3. SAC THREAT DETECTED
+    THREAT PAIR: (r3a2, r5a2)
+    
+    RULES:
+        RULE_A [r3]: ("3 - Irrigation - cascading")
+        RULE_B [r5]: ("5 - Irrigation - all valves closed")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r3t1]: Item irrigationcurrentvalve received command 
+        
+        TRIGGERS_B:     [r5t1]: Item groupirrigationvalves changed to off
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r3a2]: irrigationsectionremainingtime.postUpdate(valveopentime.intvalue)
+        ACTION_B:       [r5a2]: irrigationsectionremainingtime.postUpdate(0)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+4. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a1)
+    
+    RULES:
+        RULE_A [r1]: ("1 Irrigation - system start")
+        RULE_B [r2]: ("2 - Irrigation - calculate whether to start watering")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Time cron 0 * * ? * *
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c1]: if (sumrainlast24h == null) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: sumrainlast24h.sendCommand(0)
+        ACTION_B:       [r2a1]: sumrainlast24h.sendCommand((weatherandforecastcurrentrain.sumsince(now.minushours(24), "influxdb") as number).doublevalue)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+5. WAC THREAT DETECTED
+    THREAT PAIR: (r1a2, r2a2)
+    
+    RULES:
+        RULE_A [r1]: ("1 Irrigation - system start")
+        RULE_B [r2]: ("2 - Irrigation - calculate whether to start watering")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Time cron 0 * * ? * *
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c2]: if (sumrainnext24h == null) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a2]: sumrainnext24h.sendCommand(0)
+        ACTION_B:       [r2a2]: sumrainnext24h.sendCommand(groupforecastedrain24sum.state as number)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+6. WAC THREAT DETECTED
+    THREAT PAIR: (r1a13, r3a3)
+    
+    RULES:
+        RULE_A [r1]: ("1 Irrigation - system start")
+        RULE_B [r3]: ("3 - Irrigation - cascading")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r3t1]: Item irrigationcurrentvalve received command
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r3c3]: if (nextvalve !== null)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a13]: irrigationcurrentvalve.postUpdate(off)
+        ACTION_B:       [r3a3]: irrigationcurrentvalve.sendCommand(nextvalve.name)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+7. WAC THREAT DETECTED
+    THREAT PAIR: (r2a3, r3a3)
+    
+    RULES:
+        RULE_A [r2]: ("2 - Irrigation - calculate whether to start watering")
+        RULE_B [r3]: ("3 - Irrigation - cascading")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Time cron 0 * * ? * * 
+        
+        TRIGGERS_B:     [r3t1]: Item irrigationcurrentvalve received command
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r3c3]: if (nextvalve !== null)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r2a3]: irrigationcurrentvalve.sendCommand(irrigationvalvezone1.name)
+        ACTION_B:       [r3a3]: irrigationcurrentvalve.sendCommand(nextvalve.name)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+8. WAC THREAT DETECTED
+    THREAT PAIR: (r3a2, r4a1)
+    
+    RULES:
+        RULE_A [r3]: ("3 - Irrigation - cascading")
+        RULE_B [r4]: ("4 - Irrigation - update timer")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r3t1]: Item irrigationcurrentvalve received command 
+        
+        TRIGGERS_B:     [r4t1]: Time cron 0 * * ? * *
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r4c1]: if (irrigationsectionremainingtime.state as number > 0)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r3a2]: irrigationsectionremainingtime.postUpdate(valveopentime.intvalue)
+        ACTION_B:       [r4a1]: irrigationsectionremainingtime.postUpdate((irrigationsectionremainingtime.state as number) - 1)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+9. WAC THREAT DETECTED
+    THREAT PAIR: (r3a3, r5a1)
+    
+    RULES:
+        RULE_A [r3]: ("3 - Irrigation - cascading")
+        RULE_B [r5]: ("5 - Irrigation - all valves closed")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r3t1]: Item irrigationcurrentvalve received command 
+        
+        TRIGGERS_B:     [r5t1]: Item groupirrigationvalves changed to off
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r3c3]: if (nextvalve !== null) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r3a3]: irrigationcurrentvalve.sendCommand(nextvalve.name)
+        ACTION_B:       [r5a1]: irrigationcurrentvalve.postUpdate(off)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+10. WAC THREAT DETECTED
+    THREAT PAIR: (r4a1, r5a2)
+    
+    RULES:
+        RULE_A [r4]: ("4 - Irrigation - update timer")
+        RULE_B [r5]: ("5 - Irrigation - all valves closed")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r4t1]: Time cron 0 * * ? * * 
+        
+        TRIGGERS_B:     [r5t1]: Item groupirrigationvalves changed to off
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r4c1]: if (irrigationsectionremainingtime.state as number > 0) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r4a1]: irrigationsectionremainingtime.postUpdate((irrigationsectionremainingtime.state as number) - 1)
+        ACTION_B:       [r5a2]: irrigationsectionremainingtime.postUpdate(0)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+

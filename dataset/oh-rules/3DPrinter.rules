@@ -1,0 +1,58 @@
+// https://community.openhab.org/t/3d-printer-status-and-commands-from-to-octoprint-via-http-rest-api/29890
+
+rule "0 Time Printed String"
+when
+	Item OctoprintJobPrintTime changed
+then
+    val seconds = (OctoprintJobPrintTime.state as DecimalType).intValue
+    val int totalMinutes = seconds/60
+    val int remainderSecs = seconds%60
+    val int totalHours = totalMinutes/60
+    val int remainderMins = totalMinutes%60
+    val formattedTime = String::format("%02d", totalHours) + ":" + String::format("%02d", remainderMins) + ":" + String::format("%02d", remainderSecs)
+    OctoprintJobPrintTimeString.postUpdate(formattedTime)
+end
+
+rule "1 Time Left String"
+when
+	Item OctoprintJobPrintTimeLeft changed
+then
+    val seconds = (OctoprintJobPrintTimeLeft.state as DecimalType).intValue
+    val int totalMinutes = seconds/60
+    val int remainderSecs = seconds%60
+    val int totalHours = totalMinutes/60
+    val int remainderMins = totalMinutes%60
+    val formattedTime = String::format("%02d", totalHours) + ":" + String::format("%02d", remainderMins) + ":" + String::format("%02d", remainderSecs)
+    OctoprintJobPrintTimeLeftString.postUpdate(formattedTime)
+
+    val DateTime OctoprintETA = now.plusSeconds(seconds)
+    //logInfo("Testing" ,"Octoprint ETA: " + OctoprintETA.toString)
+    OctoprintJobPrintETAString.postUpdate(OctoprintETA.toString)
+    OctoprintJobPrintETADateTime.postUpdate(new DateTimeType(OctoprintETA.toString))
+
+end
+
+rule "2 POST Printer Command"
+when
+	Item OctoprintPrinterCommand received update
+then
+    var url = "http://octopi.yourdomain/api/job?apikey=YOURAPIKEY"
+    var contenttype = "application/json"
+    var POSTrequest = '{"command":"' +  OctoprintPrinterCommand.state + '"}'
+
+    var output = sendHttpPostRequest(url, contenttype, POSTrequest)
+    
+    logInfo("Test Octoprint:", output);
+end
+
+rule "3 POST System Command"
+when
+	Item OctoprintSystemCommand received update
+then
+    var url = 'http://octopi.yourdomain/api/system/commands/core/' + OctoprintSystemCommand.state + '?apikey=YOURAPIKEY'
+    //var contenttype = "application/json"
+
+    var output = sendHttpPostRequest(url)
+    
+    logInfo("Test Octoprint:", output);
+end

@@ -1,0 +1,69 @@
+FILE: detect-output\iotb-rules\Cafeteira.rules
+------------------------------------------------
+THREATS DETECTED: 2
+SAC: 0
+WAC: 2
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+1. WAC THREAT DETECTED
+    THREAT PAIR: (r2a2, r3a1)
+    
+    RULES:
+        RULE_A [r2]: ("r2 - A cada uma hora")
+        RULE_B [r3]: ("r3 - Master bedroom alarm time")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Time cron 0 0 0/1 1/1 * ? * 
+        
+        TRIGGERS_B:     [r3t1]: Time cron 0 5 0 * * ?
+                    OR  [r3t2]: Item alarm_mastertimemins received update
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r2c2]: if (now.gethourofday >= 10) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r2a2]: tom_gter_cafeteira.sendCommand(off)
+        ACTION_B:       [r3a1]: tom_gter_cafeteira.sendCommand(on)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+2. WAC THREAT DETECTED
+    THREAT PAIR: (r3a1, r5a1)
+    
+    RULES:
+        RULE_A [r3]: ("r3 - Master bedroom alarm time")
+        RULE_B [r5]: ("r5 - Desligar a cafeteira se ligada fora do horario limite")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r3t1]: Time cron 0 5 0 * * ?
+                    OR  [r3t2]: Item alarm_mastertimemins received update 
+        
+        TRIGGERS_B:     [r5t1]: Item tom_gter_cafeteira changed to on
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r5c1]: if (now.gethourofday > 10)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r3a1]: tom_gter_cafeteira.sendCommand(on)
+        ACTION_B:       [r5a1]: tom_gter_cafeteira.sendCommand(off)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+

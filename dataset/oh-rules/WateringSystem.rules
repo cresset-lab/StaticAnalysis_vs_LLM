@@ -1,0 +1,420 @@
+// https://community.openhab.org/t/complete-watering-system-based-on-openhab/35691
+
+/*
+ * Watering rules
+ */
+import org.openhab.core.library.types.*
+import org.joda.time.*
+import java.util.Date
+
+var int maxNoWtrDays = 2	        // acceptable maximum days without watering 
+var DateTime lastWtrDate = null     // date of last watering or rain 
+val minimumReqRainfall = 10         // minimum required rainfall that stops watering procedure
+var rainfallMm = 0.0			    // rainfall forecast for next 24h 
+var missingRainfall = 0.0           // difference between rainfall forecast-minimum req.rainfall 
+var isWatering = false 			    // is watering now
+ 
+// watering timers
+var Timer WtrValveFrontStartTimer = null
+var Timer WtrValveFrontStopTimer  = null
+var Timer WtrValveBackStartTimer  = null
+var Timer WtrValveBackStopTimer   = null
+var Timer WtrValveLineStartTimer  = null
+var Timer WtrValveLineStopTimer   = null 
+var Timer WateringStopTimer       = null		// timer used to execute action after full watering cycle
+
+// Constants for controling contact with the opposite logic
+var OnOffType  ON_R 
+var OnOffType  OFF_R
+
+// === Data required to get wheather forecast from OpenWeatherMap ===
+val APPID  = "<YOUR KEY>"		// your key from OpenWeatherMAp
+val cityId = " <ID OF CITY> "    // city id from OpenWeatherMAp
+val cnt    = 8                  // number of 3h segments, 8 segments = 24h
+val openwheatherUrl = "http://api.openweathermap.org/data/2.5/"
+// =============================================================================
+
+// For debug
+val checkUserStartTime = true  // check watering time ?
+val checkWtrRainSensor = true  // check rain sensor ?
+
+rule "1 Watering_garden_startup"
+	when
+		System started		
+	then
+		// pseudoconstant initialization
+		ON_R = OFF
+		OFF_R = ON
+    	isWatering = false
+    	
+    	// valve initialization
+    	WtrValveFront.sendCommand(OFF_R)
+    	WtrValveBack.sendCommand(OFF_R)
+    	WtrValveLine.sendCommand(OFF_R)
+		
+		// displaying watering parameters, waiting 80s to be sure that mapdb restore all values
+		createTimer(now.plusSeconds(80)) [| 
+			logInfo( "FILE", "Watering_garden_startup: ================ Wtr param  initialization ================")
+			logInfo( "FILE", "Watering_garden_startup: WtrStartTime       [" + WtrStartTime.state + "]")
+			logInfo( "FILE", "Watering_garden_startup: WtrDurationFront   [" + WtrDurationFront.state + "]")
+			logInfo( "FILE", "Watering_garden_startup: WtrDurationBack    [" + WtrDurationBack.state + "]")
+			logInfo( "FILE", "Watering_garden_startup: WtrDurationLine    [" + WtrDurationLine.state + "]")
+			logInfo( "FILE", "Watering_garden_startup: WtrScaleFactor     [" + WtrScaleFactor.state + "]")
+			logInfo( "FILE", "Watering_garden_startup: WtrAuto            [" + WtrAuto.state + "]")
+			logInfo( "FILE", "Watering_garden_startup: WtrRainSensor      [" + WtrRainSensor.state + "]")
+		   	logInfo( "FILE", "Watering_garden_startup: checkWtrRainSensor [" + checkWtrRainSensor + "]")
+    		logInfo( "FILE", "Watering_garden_startup: checkUserStartTime [" + checkUserStartTime + "]")
+		]
+end 
+
+// Rule executed when rain sensor detect rain - stop watering
+rule "2 Rain_sensor_rain_activated"
+    when
+	    Item RainSensor changed from CLOSED to OPEN or
+        Item RainSensor changed from NULL to OPEN
+    then
+    	logInfo( "FILE", "Rain_sensor_rain_detected: Rain detected, stopping watering if running")
+    	logInfo("Rain sensor is wet")
+    	Notification_Proxy_Wtr.sendCommand("STOP")
+end
+
+rule "3 Rain_sensor_rain_deactivated"
+    when
+	    Item RainSensor changed from OPEN to CLOSED or
+        Item RainSensor changed from NULL to CLOSED
+    then
+   		logInfo( "FILE", "Rain_sensor_rain_detected: Rain detected is dry")
+    	logInfo("Rainsensor is dry")
+end
+    
+// User set watering to "automatic watering"  
+rule "4 Wtr_auto_ON" 
+	when
+		Item WtrAuto changed from OPEN to CLOSED or
+        Item WtrAuto changed from NULL to CLOSED
+	then
+		logInfo("Watering mode is set to automatic")
+end
+	
+// ustawienie podlewania na manualne 
+rule "5 Wtr_auto_OFF" 
+	when
+		Item WtrAuto changed from CLOSED to OPEN or
+        Item WtrAuto changed from NULL to OPEN
+	then
+		logInfo("Watering mode is set to manual")
+end
+
+// Manual start of watering  
+rule "6 Watering_manual_start/stop"
+    when
+	    Item WtrStartBtn changed from OPEN to CLOSED or
+        Item WtrStartBtn changed from NULL to CLOSED
+    then
+		// if watering in progress this rule stops watering 
+    	if ( isWatering == false ) {
+    		logInfo( "FILE", "Watering_manual_start/stop: Start watering, manual activation")
+    		logInfo("User pressed button START watering")
+    		Notification_Proxy_Wtr.sendCommand("START")
+    	} else { 
+    		logInfo( "FILE", "Watering_manual_start/stop: Stoping  watering, manual activation")
+    		logInfo("User pressed button STOP watering")
+    		Notification_Proxy_Wtr.sendCommand("STOP")
+    	}    
+end
+
+// This rule stops / starts watering 
+rule "7 Watering_starting/stoping"
+when 
+	Item Notification_Proxy_Wtr received update
+then
+	var String msg = Notification_Proxy_Wtr.state.toString
+   
+    logInfo( "FILE", "============== Watering starting/stoping ==========")
+	logInfo( "FILE", "Watering_starting/stoping: Stoping watering if already started")
+	logInfo( "FILE", "Watering_starting/stoping: msg [" + msg + "]")
+
+
+	// stop watering if is started. 
+    if(WtrValveFrontStartTimer != null) {
+       	WtrValveFrontStartTimer.cancel
+        WtrValveFrontStartTimer = null
+        logInfo( "FILE", "Watering_starting/stoping:  WtrValveFrontStartTimer stoped") 
+    }
+    	
+    if(WtrValveFrontStopTimer != null) {
+       	WtrValveFrontStopTimer.cancel
+        WtrValveFrontStopTimer = null
+        logInfo( "FILE", "Watering_starting/stoping:  WtrValveFrontStopTimer stoped") 
+    }
+    	
+    if(WtrValveBackStartTimer != null) {
+       	WtrValveBackStartTimer.cancel
+        WtrValveBackStartTimer = null
+        logInfo( "FILE", "Watering_starting/stoping:  WtrValveBackStartTimer stoped") 
+    }
+    	
+    if(WtrValveBackStopTimer != null) {
+       	WtrValveBackStopTimer.cancel
+        WtrValveFrontStopTimer = null
+        logInfo( "FILE", "Watering_starting/stoping:  WtrValveFrontStopTimer stoped") 
+    }
+
+    if(WtrValveLineStartTimer != null) {
+       	WtrValveLineStartTimer.cancel
+        WtrValveLineStartTimer = null
+        logInfo( "FILE", "Watering_starting/stoping:  WtrValveLineStartTimer stoped") 
+    }
+    	
+    if(WtrValveLineStopTimer != null) {
+       	WtrValveLineStopTimer.cancel
+        WtrValveLineStopTimer = null
+        logInfo( "FILE", "Watering_starting/stoping:  WtrValveLineStopTimer stoped") 
+    }
+
+    if(WateringStopTimer != null) {
+       	WateringStopTimer.cancel
+        WateringStopTimer = null
+        logInfo( "FILE", "Watering_starting/stoping: WateringStopTimer stoped") 
+    }
+
+    WtrValveFront.sendCommand(OFF_R)
+    WtrValveBack.sendCommand(OFF_R)
+    WtrValveLine.sendCommand(OFF_R)
+    WtrLED.sendCommand(OFF)
+
+	// watering process is stoped
+    isWatering = false
+    	
+	// should we start watering?
+    if (msg == "START") {
+	    	
+	    logInfo( "FILE", "Watering_starting/stoping: starting watering")
+	    		    	
+		// watering light is on
+		WtrLED.sendCommand(ON)
+
+		// watering process is starting
+		isWatering = true
+				    			
+		// setting watering duration - read duration from items
+    	var Number durationFront = WtrDurationFront.state as DecimalType
+    	var Number durationBack  = WtrDurationBack.state as DecimalType
+    	var Number durationLine  = WtrDurationLine.state as DecimalType
+    		    		
+    	var DateTime startTime = now
+    	var DateTime endTime = now		
+    
+		// setting last watering date - mainly for sitemap
+    	var String NowTime = String::format( "%1$td.%1$tm.%1$tY %1$tH:%1$tM", new Date() )
+    	logInfo( "FILE","Watering_starting/stoping: NowTime[" + NowTime + "]")
+	    WtrLastDate.sendCommand(NowTime)
+        
+		// scaling factor
+    	var Number scaleFactor = WtrScaleFactor.state as DecimalType
+    		
+		// taking into account scaling factor
+    	var int wtrFrontTime = ((durationFront * scaleFactor) / 100).intValue
+    	var int wtrBackTime  = ((durationBack  * scaleFactor) / 100).intValue
+    	var int wtrLineTime  = ((durationLine  * scaleFactor) / 100).intValue
+
+    	logInfo( "FILE","Watering_starting/stoping: durationFront[" + durationFront + "]")
+    	logInfo( "FILE","Watering_starting/stoping: durationBack [" + durationBack + "]")
+    	logInfo( "FILE","Watering_starting/stoping: durationLine [" + durationLine + "]")
+		logInfo( "FILE","Watering_starting/stoping: scaleFactor  [" + scaleFactor + "]")
+		logInfo( "FILE","Watering_starting/stoping: wtrFrontTime [" + wtrFrontTime + "]")
+		logInfo( "FILE","Watering_starting/stoping: wtrBackTime  [" + wtrBackTime + "]")
+		logInfo( "FILE","Watering_starting/stoping: wtrLineTime  [" + wtrLineTime + "]")
+		logInfo( "FILE","Watering_starting/stoping: WtrRainSensor[" + WtrRainSensor.state + "]")
+
+
+		// starting watering - front section
+    	if (wtrFrontTime > 0) {
+    		endTime = startTime.plusMinutes(wtrFrontTime)
+			logInfo( "FILE", "Watering_starting/stoping: Watering front starts [" + startTime + "] finish [" + endTime + "]")
+    		WtrValveFrontStartTimer  = createTimer(startTime) [| 
+    			logInfo( "FILE", "Watering_starting/stoping: WtrValveFront[ON_R]")
+   				WtrValveFront.sendCommand(ON_R)
+    		]
+    		WtrValveFrontStopTimer   = createTimer(endTime) [| 
+    			logInfo( "FILE", "Watering_starting/stoping: WtrValveFront[OFF_R]")
+   				WtrValveFront.sendCommand(OFF_R)
+    		]
+    		startTime = endTime.plusMinutes(1)
+    	}
+
+		// starting watering - back section
+    	if (wtrBackTime > 0) {
+    		endTime = startTime.plusMinutes(wtrBackTime)
+    		logInfo( "FILE", "Watering_starting/stoping: Watering front back [" + endTime + "] finish [" + endTime + "]")
+    		WtrValveBackStartTimer  = createTimer(startTime) [| 
+    			logInfo( "FILE", "Watering_starting/stoping: WtrValveBack[ON_R]")
+   				WtrValveBack.sendCommand(ON_R)
+    		]
+    		WtrValveBackStopTimer   = createTimer(endTime) [| 
+    			logInfo( "FILE", "Watering_starting/stoping: WtrValveBack[OFF_R]")
+   				WtrValveBack.sendCommand(OFF_R)
+    		]
+    		startTime = endTime.plusMinutes(1)
+    	}
+
+		// starting watering - watering line
+    	if (wtrLineTime > 0) {
+    		endTime = startTime.plusMinutes(wtrLineTime)
+			logInfo( "FILE", "Watering_starting/stoping: Watering line starts [" + endTime + "] finish [" + endTime + "]")
+    		WtrValveLineStartTimer  = createTimer(startTime) [| 
+    			logInfo( "FILE", "Watering_starting/stoping: WtrValveLine[ON_R]")
+   				WtrValveLine.sendCommand(ON_R)
+    		]
+    		WtrValveLineStopTimer   = createTimer(endTime) [| 
+    			logInfo( "FILE", "Watering_starting/stoping: WtrValveLine[OFF_R]")
+   				WtrValveLine.sendCommand(OFF_R)
+    		]
+    		startTime = endTime
+    	}
+
+		pushover("Watering is started, it will finish at [" + endTime + "]", "OpenHabian",-2)
+    		
+		// execute some action after watering
+    	WateringStopTimer = createTimer(endTime) [| 
+    		lastWtrDate = now	// last watering date (it helps us calculate how many days without watering)
+    		logInfo( "FILE", "Watering_starting/stoping: ==== Watering ended ====")
+    		WtrLED.sendCommand(OFF)
+    		isWatering = false
+    		logInfo("Watering was finished")
+    		pushover("Watering was finished", " OpenHabian",-2)
+    	]
+
+    }
+end
+	
+	
+
+
+
+
+// Watering algorithm
+rule "8 Watering_algorithm"
+    when
+      Time cron "0 0 0/1 1/1 * ? *"   //check every hour
+    then
+	
+	// // Check if actual hour is equal to watering hour and if watering mode is set to automatic
+	// var DateTime userStartTime = parse(now.getYear() + "-" + now.getMonthOfYear() + "-" + now.getDayOfMonth() + "T" + WtrStartTime.state + ":00")
+
+    // check hour of watering, watering mode and isWatering 
+	// if ( ( ( userStartTime.getHourOfDay == now.getHourOfDay()  &&  userStartTime.getMinuteOfHour() == now.getMinuteOfHour() ) || checkUserStartTime == false )
+    // 	&& WtrAuto.state == CLOSED && (isWatering == false) ) 
+    if ( WtrAuto.state == CLOSED && (isWatering == false))
+        {
+		// logInfo( "FILE", " ======= Wheather algorithm  ======= ")
+		// logInfo( "FILE", "Watering_algorithm: now                       [" + now + "]")
+		// logInfo( "FILE", "Watering_algorithm: userStartTime             [" + userStartTime + "]")
+		// logInfo( "FILE", "Watering_algorithm: checkUserStartTime        [" + checkUserStartTime + "]")
+		// logInfo( "FILE", "Watering_algorithm: WtrAuto.state             [" + WtrAuto.state + "]")
+		// logInfo( "FILE", "Watering_algorithm: isWatering              	[" + isWatering + "]")
+		// logInfo( "FILE", "Watering_algorithm: RainSensor.state          [" + WtrRainSensor.state + "]")
+		// logInfo( "FILE", "Watering_algorithm: lastWtrDate               [" + lastWtrDate + "]")
+		// logInfo( "FILE", "Watering_algorithm: maxNoWtrDays              [" + maxNoWtrDays + "]")  
+    	// logInfo( "FILE", "Watering_algorithm: checkWtrRainSensor		[" + checkWtrRainSensor + "]")
+    	// logInfo( "FILE", "Watering_algorithm: checkUserStartTime		[" + checkUserStartTime + "]")
+    	    	
+	
+		// /*
+		//  * Get information about rainfall forecast 
+		//  */
+		// var forecastUrl = openwheatherUrl + "forecast?id=" + cityId + "&APPID=" + APPID + "&units=metric&cnt=" + cnt
+		// logInfo( "FILE", "Watering_algorithm: Getting wheather forecast [" + forecastUrl + "]")
+		
+		// // Trying get  wheather forecast 3 times (from time to time, first try fail)
+		// var forecastJson=""
+		// try {
+		// 	forecastJson = sendHttpGetRequest(forecastUrl)
+		// 	var getCounter=0
+		// 	while ( (forecastJson==null) && (getCounter<3)) {
+		// 		forecastJson = sendHttpGetRequest(forecastUrl)
+		// 		getCounter++
+		// 		logInfo( "FILE", "Watering_algorithm: getCounter[" + getCounter + "]")
+		// 	}
+		// } catch(Throwable t) {
+      	// 	logInfo("FILE", "Watering_algorithm: Exception happen during getting heather data")
+      	// 	forecastJson = null
+   		// }
+				
+		// logInfo( "FILE", "Watering_algorithm: forecastJson[" + forecastJson + "]")
+		
+		// if ( !(forecastJson == null)) {	
+
+		// 	// When wheather forecast cannot be downloaded we get NULL
+		// 	if( ! (forecastJson=="<code>NULL</code>")) {
+
+		// 		// Extract only section about rainfall, looked at
+		// 		// https://community.openhab.org/t/solved-smhi-weather/22300/20
+		// 		// For test use http://www.jsonquerytool.com/
+				
+		//   	    var String[] rainValues  = transform("JSONPATH","$.list[*].rain.3h", forecastJson).replace("[", "").replace("]", "").split(",") 
+	  	// 		rainfallMm = 0
+
+		// 		// Check if there is at least one 'rain' section i json
+		// 		if(rainValues.get(0)!="")	
+		// 			for (var i = 0; i < rainValues.length; i++) {
+		// 				rainfallMm = rainfallMm  + (Double::parseDouble(rainValues.get(i)))
+		// 			}
+
+	  	// 		logInfo( "FILE", "Watering_algorithm: rainfall forecast [" + rainfallMm + "] for next [" + cnt + "] periods, rainfall sum [" + rainfallMm + "]")			
+		// 	}	else {
+		// 		// could not get rainfall forecast, set rainfall=0
+		// 		logInfo( "FILE", "Watering_algorithm: Cannot get rainfall forecast")
+		// 		rainfallMm = 0
+		// 	}			
+		// } else {
+		// 	logInfo( "FILE", "Watering_algorithm: Wheather forecast is NULL - rainfallMm set to 0mm ")
+		// 	rainfallMm = 0
+		// }		
+
+		// updating rainfall forcast for GUI
+		WtrRainfallForecast.sendCommand(rainfallMm)
+		var String NowTime = String::format( "%1$td.%1$tm.%1$tY %1$tH:%1$tM", new Date() )
+		WtrRainfallForecastDate.sendCommand(NowTime)
+		
+		logInfo( "FILE", " ======= Wheather forecast ======= ")
+		logInfo( "FILE", "Watering_algorithm: rainfallMm         [" + rainfallMm + "]")
+        logInfo( "FILE", "Watering_algorithm: minimumReqRainfall [" + minimumReqRainfall + "]")
+	
+		// check rain sensor
+		if ( WtrRainSensor.state == CLOSED || checkWtrRainSensor==false ) {
+
+			logInfo( "FILE", "Watering_algorithm: RainSensor - watering is needed, start watering")
+			
+			// check rainfall forecast with minimum rainfall
+			if (rainfallMm > minimumReqRainfall) {
+
+				// rainfall for next 24h are sufficient, check how many days past since from last watering if more than 
+				// maxNoWtrDays start watering anyway
+				if ( lastWtrDate.isBefore(now.minusDays(maxNoWtrDays)) == 0 ) {
+					logInfo( "FILE", "Watering_algorithm: lastWtrDate[" +lastWtrDate+ "] is later than now-maxNoWtrDays[" +maxNoWtrDays+ "]")
+					logInfo("Watering is starting")
+					Notification_Proxy_Wtr.sendCommand("START")
+                    
+				} 
+				
+			} else {
+				// rainfall forecast is not enough 
+				missingRainfall = minimumReqRainfall - rainfallMm
+				logInfo( "FILE", "Watering_algorithm: lack of  [" + missingRainfall + "] mm")
+				logInfo("Watering is starting")
+				Notification_Proxy_Wtr.sendCommand("START")		
+			}	
+			logInfo( "FILE", " ======= End of Watering algorithm  ======= ")
+		} else {
+			// rain sensor is wet 
+			lastWtrDate = now 
+			logInfo( "FILE", "Watering_algorithm: watering not started, RainSensor - watering is not needed")
+		}	
+	} 
+    else {
+		logInfo( "FILE", "Watering_algorithm: not started. checkUserStartTime["  +checkUserStartTime+ "] WtrAuto.stat["
+			+WtrAuto.state + "] isWatering[" +isWatering+ "] WtrRainSensor.state[" + WtrRainSensor.state + "]"
+		)
+	}
+end

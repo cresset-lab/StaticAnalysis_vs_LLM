@@ -1,0 +1,61 @@
+import org.openhab.core.library.types.*
+import org.joda.time.DateTime
+
+rule "r1 - Startup"
+when
+	System started
+then
+	logInfo("chicken", "system started")
+	postUpdate(OPS_MODE, 1)
+end
+
+rule "r2 - ModeChange"
+when
+    Item OPS_MODE received update
+then
+	logInfo("chicken", "mode changed")
+    if (OPS_MODE.state == 0) { // closed
+		logInfo("chicken", "manually closing door")
+        sendCommand(RELAY_1, OFF)
+        sendCommand(RELAY_2, OFF)
+    }
+    if (OPS_MODE.state == 1) {
+    	logInfo("chicken", "set door to auto mode")
+    	var DateTime eight = new DateTime().withTime(8,0,0,0)
+		if ((now > 8) && now < sunset) { // (now.isAfter(eight) && now.isBefore((SUNSET_TIME.state as DateTimeType).calendar.timeInMillis)) {
+	        sendCommand(RELAY_1, ON)
+	        sendCommand(RELAY_2, ON)
+		} else {
+	        sendCommand(RELAY_1, OFF)
+	        sendCommand(RELAY_2, OFF)
+		}
+    }
+    if (OPS_MODE.state == 2) {
+		logInfo("chicken", "manually opening door")
+        sendCommand(RELAY_1, ON)
+        sendCommand(RELAY_2, ON)
+    }
+end
+
+rule "r3 - MorningAction"
+when
+	Time cron "0 0 8 1/1 * ? *" // 8 o'clock every morning
+then
+	logInfo("chicken", "time to let the cage fighters out!")
+	if(OPS_MODE.state == 1) {
+        sendCommand(RELAY_1, ON)
+        sendCommand(RELAY_2, ON)
+	} 
+end
+
+
+rule "r4 - SunsetAction"
+when
+	Item SUNSET_EVENT received update ON
+then
+	logInfo("chicken", "received sunset event")
+	if(OPS_MODE.state == 1) {
+        sendCommand(RELAY_1, OFF)
+        sendCommand(RELAY_2, OFF)
+	}
+end

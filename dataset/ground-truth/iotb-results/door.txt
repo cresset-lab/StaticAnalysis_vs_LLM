@@ -1,0 +1,135 @@
+FILE: detect-output\iotb-rules\door.rules
+------------------------------------------------
+THREATS DETECTED: 4
+SAC: 0
+WAC: 0
+STC: 0
+WTC: 1
+SCC: 2
+WCC: 1
+------------------------------------------------
+
+7. WTC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2t1)
+
+    RULES:
+        RULE_A:         [r1]: ("r1 - Startup")
+        RULE_B:         [r2]: ("r2 - ModeChange")
+
+    INITIAL TRIGGER:
+        TRIGGERS_A:     [r1t1]: System started
+
+    TRIGGER-ACTION PAIR
+        ACTION_A:       [r1a1]: ops_mode.postUpdate(1)
+        TRIGGER_B:      [r2t1]: Item ops_mode received update
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c2]: if (ops_mode == 1)
+                    AND [r2c3]: if (now < sunset)
+                    AND [r2c6]: if (now > 8)
+
+    RESULTING ACTION:
+        ACTION_B:       [r2a3]: relay_1.sendCommand(on)
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    IF OVERLAPPING SETS OF CONDITIONS ARE CONCURRENTLY ENABLED
+    THE TRIGGER-ACTION PAIR CAUSES A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+
+8. SCC THREAT DETECTED
+    THREAT PAIR: (r1a1, r3c1)
+
+    RULES:
+        RULE_A:         [r1]: ("r1 - Startup")
+        RULE_B:         [r3]: ("r3 - MorningAction")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r3t1]: Time cron 0 0 8 1/1 * ? *
+
+    GUARDING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+
+    CONDITION-ACTION PAIR:
+        ACTION_A:       [r1a1]: ops_mode.postUpdate(1) 
+
+        CONDITIONS_B:   [r3c1]: if (ops_mode == 1) 
+
+    RESULTING ACTION:
+        ACTION_B:       [r3a1]: relay_1.sendCommand(on) 
+
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    WHILE GUARDING CONDITIONS ARE ENABLED
+    THE CONDITION-ACTION PAIR
+    WILL CAUSE A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+
+9. SCC THREAT DETECTED
+    THREAT PAIR: (r1a1, r4c1)
+
+    RULES:
+        RULE_A:         [r1]: ("r1 - Startup")
+        RULE_B:         [r4]: ("r4 - SunsetAction")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r4t1]: Item sunset_event received update on
+
+    GUARDING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+
+    CONDITION-ACTION PAIR:
+        ACTION_A:       [r1a1]: ops_mode.postUpdate(1) 
+
+        CONDITIONS_B:   [r4c1]: if (ops_mode == 1) 
+
+    RESULTING ACTION:
+        ACTION_B:       [r4a1]: relay_1.sendCommand(off) 
+
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    WHILE GUARDING CONDITIONS ARE ENABLED
+    THE CONDITION-ACTION PAIR
+    WILL CAUSE A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+
+10. WCC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2c2)
+
+    RULES:
+        RULE_A:         [r1]: ("r1 - Startup")
+        RULE_B:         [r2]: ("r2 - ModeChange")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Item ops_mode received update
+
+    GUARDING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+
+    CONDITION-ACTION PAIR:
+        ACTION_A:       [r1a1]: ops_mode.postUpdate(1) 
+
+        CONDITION_B:     [r2c2]: if (ops_mode == 1)
+
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    WHILE GUARDING CONDITIONS ARE ENABLED
+    THE CONDITION-ACTION PAIR
+    MAY CAUSE UNEXPECTED BEHAVIOUR.
+
+------------------------------------------------
+

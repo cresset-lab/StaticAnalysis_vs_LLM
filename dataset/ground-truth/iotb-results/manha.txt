@@ -1,0 +1,38 @@
+FILE: detect-output\iotb-rules\manha.rules
+------------------------------------------------
+THREATS DETECTED: 1
+SAC: 0
+WAC: 1
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+1. WAC THREAT DETECTED
+    THREAT PAIR: (r1a4, r3a1)
+    
+    RULES:
+        RULE_A [r1]: ("Acende luzes de baixo ao acender a escada")
+        RULE_B [r3]: ("Apaga a luz da churrasqueira as 7:00")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item luz_gsup_escada changed to on 
+        
+        TRIGGERS_B:     [r3t1]: Time cron 0 0 7 1/1 * ? *
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c1]: if (now.gethourofday <= 7) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a4]: luz_gter_varanda_teto.sendCommand(on)
+        ACTION_B:       [r3a1]: luz_gter_varanda_teto.sendCommand(off)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+

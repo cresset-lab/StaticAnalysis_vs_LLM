@@ -1,0 +1,449 @@
+FILE: detect-output\iotb-rules\motion.rules
+------------------------------------------------
+THREATS DETECTED: 16
+SAC: 3
+WAC: 13
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+1. SAC THREAT DETECTED
+    THREAT PAIR: (r3a3, r4a3)
+    
+    RULES:
+        RULE_A [r3]: ("Front Door opened or closed")
+        RULE_B [r4]: ("Garden Door opened or closed")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r3t1]: Item csensor_frontdoor changed 
+        
+        TRIGGERS_B:     [r4t1]: Item csensor_gardendoor changed
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r3a3]: strlastmotionloc.postUpdate("FrontDoor")
+        ACTION_B:       [r4a3]: strlastmotionloc.postUpdate("GardenDoor")
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+2. SAC THREAT DETECTED
+    THREAT PAIR: (r3a3, r5a3)
+    
+    RULES:
+        RULE_A [r3]: ("Front Door opened or closed")
+        RULE_B [r5]: ("Kitchen Door opened or closed")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r3t1]: Item csensor_frontdoor changed 
+        
+        TRIGGERS_B:     [r5t1]: Item csensor_kitchendoor changed
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r3a3]: strlastmotionloc.postUpdate("FrontDoor")
+        ACTION_B:       [r5a3]: strlastmotionloc.postUpdate("KitchenDoor")
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+3. SAC THREAT DETECTED
+    THREAT PAIR: (r4a3, r5a3)
+    
+    RULES:
+        RULE_A [r4]: ("Garden Door opened or closed")
+        RULE_B [r5]: ("Kitchen Door opened or closed")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r4t1]: Item csensor_gardendoor changed 
+        
+        TRIGGERS_B:     [r5t1]: Item csensor_kitchendoor changed
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r4a3]: strlastmotionloc.postUpdate("GardenDoor")
+        ACTION_B:       [r5a3]: strlastmotionloc.postUpdate("KitchenDoor")
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+4. WAC THREAT DETECTED
+    THREAT PAIR: (r1a2, r3a3)
+    
+    RULES:
+        RULE_A [r1]: ("Living room movement")
+        RULE_B [r3]: ("Front Door opened or closed")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item csensor_living_motion changed 
+        
+        TRIGGERS_B:     [r3t1]: Item csensor_frontdoor changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c1]: if (csensor_living_motion == closed)
+                    AND [r1c2]: if (csensor_firstfl_motion == open) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a2]: strlastmotionloc.postUpdate("Upstairs")
+        ACTION_B:       [r3a3]: strlastmotionloc.postUpdate("FrontDoor")
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+5. WAC THREAT DETECTED
+    THREAT PAIR: (r1a2, r4a3)
+    
+    RULES:
+        RULE_A [r1]: ("Living room movement")
+        RULE_B [r4]: ("Garden Door opened or closed")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item csensor_living_motion changed 
+        
+        TRIGGERS_B:     [r4t1]: Item csensor_gardendoor changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c1]: if (csensor_living_motion == closed)
+                    AND [r1c2]: if (csensor_firstfl_motion == open) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a2]: strlastmotionloc.postUpdate("Upstairs")
+        ACTION_B:       [r4a3]: strlastmotionloc.postUpdate("GardenDoor")
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+6. WAC THREAT DETECTED
+    THREAT PAIR: (r1a2, r5a3)
+    
+    RULES:
+        RULE_A [r1]: ("Living room movement")
+        RULE_B [r5]: ("Kitchen Door opened or closed")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item csensor_living_motion changed 
+        
+        TRIGGERS_B:     [r5t1]: Item csensor_kitchendoor changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c1]: if (csensor_living_motion == closed)
+                    AND [r1c2]: if (csensor_firstfl_motion == open) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a2]: strlastmotionloc.postUpdate("Upstairs")
+        ACTION_B:       [r5a3]: strlastmotionloc.postUpdate("KitchenDoor")
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+7. WAC THREAT DETECTED
+    THREAT PAIR: (r1a4, r2a4)
+    
+    RULES:
+        RULE_A [r1]: ("Living room movement")
+        RULE_B [r2]: ("First floor movement")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item csensor_living_motion changed 
+        
+        TRIGGERS_B:     [r2t1]: Item csensor_firstfl_motion changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c3]: if (csensor_living_motion == open) 
+        
+        CONDITIONS_B:   [r2c3]: if (csensor_firstfl_motion == open)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a4]: strlastmotionloc.postUpdate("Downstairs")
+        ACTION_B:       [r2a4]: strlastmotionloc.postUpdate("Upstairs")
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+8. WAC THREAT DETECTED
+    THREAT PAIR: (r1a4, r3a3)
+    
+    RULES:
+        RULE_A [r1]: ("Living room movement")
+        RULE_B [r3]: ("Front Door opened or closed")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item csensor_living_motion changed 
+        
+        TRIGGERS_B:     [r3t1]: Item csensor_frontdoor changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c3]: if (csensor_living_motion == open) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a4]: strlastmotionloc.postUpdate("Downstairs")
+        ACTION_B:       [r3a3]: strlastmotionloc.postUpdate("FrontDoor")
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+9. WAC THREAT DETECTED
+    THREAT PAIR: (r1a4, r4a3)
+    
+    RULES:
+        RULE_A [r1]: ("Living room movement")
+        RULE_B [r4]: ("Garden Door opened or closed")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item csensor_living_motion changed 
+        
+        TRIGGERS_B:     [r4t1]: Item csensor_gardendoor changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c3]: if (csensor_living_motion == open) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a4]: strlastmotionloc.postUpdate("Downstairs")
+        ACTION_B:       [r4a3]: strlastmotionloc.postUpdate("GardenDoor")
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+10. WAC THREAT DETECTED
+    THREAT PAIR: (r1a4, r5a3)
+    
+    RULES:
+        RULE_A [r1]: ("Living room movement")
+        RULE_B [r5]: ("Kitchen Door opened or closed")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item csensor_living_motion changed 
+        
+        TRIGGERS_B:     [r5t1]: Item csensor_kitchendoor changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r1c3]: if (csensor_living_motion == open) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a4]: strlastmotionloc.postUpdate("Downstairs")
+        ACTION_B:       [r5a3]: strlastmotionloc.postUpdate("KitchenDoor")
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+11. WAC THREAT DETECTED
+    THREAT PAIR: (r2a2, r3a3)
+    
+    RULES:
+        RULE_A [r2]: ("First floor movement")
+        RULE_B [r3]: ("Front Door opened or closed")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Item csensor_firstfl_motion changed 
+        
+        TRIGGERS_B:     [r3t1]: Item csensor_frontdoor changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r2c1]: if (csensor_firstfl_motion == closed)
+                    AND [r2c2]: if (csensor_living_motion == open) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r2a2]: strlastmotionloc.postUpdate("Downstairs")
+        ACTION_B:       [r3a3]: strlastmotionloc.postUpdate("FrontDoor")
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+12. WAC THREAT DETECTED
+    THREAT PAIR: (r2a2, r4a3)
+    
+    RULES:
+        RULE_A [r2]: ("First floor movement")
+        RULE_B [r4]: ("Garden Door opened or closed")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Item csensor_firstfl_motion changed 
+        
+        TRIGGERS_B:     [r4t1]: Item csensor_gardendoor changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r2c1]: if (csensor_firstfl_motion == closed)
+                    AND [r2c2]: if (csensor_living_motion == open) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r2a2]: strlastmotionloc.postUpdate("Downstairs")
+        ACTION_B:       [r4a3]: strlastmotionloc.postUpdate("GardenDoor")
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+13. WAC THREAT DETECTED
+    THREAT PAIR: (r2a2, r5a3)
+    
+    RULES:
+        RULE_A [r2]: ("First floor movement")
+        RULE_B [r5]: ("Kitchen Door opened or closed")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Item csensor_firstfl_motion changed 
+        
+        TRIGGERS_B:     [r5t1]: Item csensor_kitchendoor changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r2c1]: if (csensor_firstfl_motion == closed)
+                    AND [r2c2]: if (csensor_living_motion == open) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r2a2]: strlastmotionloc.postUpdate("Downstairs")
+        ACTION_B:       [r5a3]: strlastmotionloc.postUpdate("KitchenDoor")
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+14. WAC THREAT DETECTED
+    THREAT PAIR: (r2a4, r3a3)
+    
+    RULES:
+        RULE_A [r2]: ("First floor movement")
+        RULE_B [r3]: ("Front Door opened or closed")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Item csensor_firstfl_motion changed 
+        
+        TRIGGERS_B:     [r3t1]: Item csensor_frontdoor changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r2c3]: if (csensor_firstfl_motion == open) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r2a4]: strlastmotionloc.postUpdate("Upstairs")
+        ACTION_B:       [r3a3]: strlastmotionloc.postUpdate("FrontDoor")
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+15. WAC THREAT DETECTED
+    THREAT PAIR: (r2a4, r4a3)
+    
+    RULES:
+        RULE_A [r2]: ("First floor movement")
+        RULE_B [r4]: ("Garden Door opened or closed")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Item csensor_firstfl_motion changed 
+        
+        TRIGGERS_B:     [r4t1]: Item csensor_gardendoor changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r2c3]: if (csensor_firstfl_motion == open) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r2a4]: strlastmotionloc.postUpdate("Upstairs")
+        ACTION_B:       [r4a3]: strlastmotionloc.postUpdate("GardenDoor")
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+16. WAC THREAT DETECTED
+    THREAT PAIR: (r2a4, r5a3)
+    
+    RULES:
+        RULE_A [r2]: ("First floor movement")
+        RULE_B [r5]: ("Kitchen Door opened or closed")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Item csensor_firstfl_motion changed 
+        
+        TRIGGERS_B:     [r5t1]: Item csensor_kitchendoor changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r2c3]: if (csensor_firstfl_motion == open) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r2a4]: strlastmotionloc.postUpdate("Upstairs")
+        ACTION_B:       [r5a3]: strlastmotionloc.postUpdate("KitchenDoor")
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+

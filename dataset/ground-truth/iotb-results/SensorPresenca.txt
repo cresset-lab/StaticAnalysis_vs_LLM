@@ -1,0 +1,22 @@
+FILE: detect-output\iotb-rules\SensorPresenca.rules
+------------------------------------------------
+THREATS DETECTED: 0
+SAC: 0
+WAC: 0
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+UNCOMMENTED ACTION-ITEM DISCREPANCIES: 10 -- (rules, prolog)
+luz_gter_salaestar_escada: (1, 0)
+luz_gter_frente_tetogaragem: (1, 0)
+luz_gter_frnete_arandelagaragem: (1, 0)
+luz_gter_jantar_teto: (1, 0)
+luz_gter_salatv_teto: (1, 0)
+luz_gter_varanda_teto: (1, 0)
+luz_gter_frente_hall: (1, 0)
+luz_gter_cozinha_teto: (1, 0)
+luz_gter_salaestar_hall: (1, 0)
+gjfl_irgaragem: (2, 1)
+------------------------------------------------

@@ -1,0 +1,33 @@
+FILE: detect-output\oh-rules\LightingScene.rules
+------------------------------------------------
+THREATS DETECTED: 1
+SAC: 1
+WAC: 0
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+1. SAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a5)
+    
+    RULES:
+        RULE_A [r1]: ("Lighting Scene Wakeup")
+        RULE_B [r2]: ("Lighting Scene Evening")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item scene_wakeup received command on 
+        
+        TRIGGERS_B:     [r2t1]: Item scene_evening received command on
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: light_ff_kitchen_sink.sendCommand(25)
+        ACTION_B:       [r2a5]: light_ff_kitchen_sink.sendCommand(scene_evening_light_ff_kitchen_sink.state as decimaltype)
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+

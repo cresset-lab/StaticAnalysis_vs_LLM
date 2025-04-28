@@ -1,0 +1,283 @@
+/*
+ * Irrigation rules
+ */
+
+import org.eclipse.smarthome.model.script.ScriptServiceUtil
+
+val logName = "Irrigation"
+var Timer irrigationTimer = null
+
+// watering time correction factor - based on the average temperature
+var coefficientFactor = 1
+
+rule "1 Irrigation - system start"
+when
+	System started
+then
+	// initiall default settings
+
+	if (SumRainLast24h.state == NULL) 
+		SumRainLast24h.sendCommand(0)
+
+	if (SumRainNext24h.state == NULL) 
+		SumRainNext24h.sendCommand(0)
+
+	if (MaxAllowedWindSpeed.state == NULL)
+		MaxAllowedWindSpeed.sendCommand(35)
+
+	if (MaxAllowedRain.state == NULL)
+		MaxAllowedRain.sendCommand(3)
+
+	if (IrrigationHoursBeforeSunrise.state == NULL)
+		IrrigationHoursBeforeSunrise.sendCommand(1)
+
+	if (IrrigationValveZone1Time.state == NULL)
+		IrrigationValveZone1Time.sendCommand(1)
+
+	if (IrrigationValveZone2Time.state == NULL)
+		IrrigationValveZone2Time.sendCommand(1)
+
+	if (IrrigationValveZone3Time.state == NULL)	
+		IrrigationValveZone3Time.sendCommand(1)
+
+	if (IrrigationValveZone4Time.state == NULL)	
+		IrrigationValveZone4Time.sendCommand(1)
+
+	if (IrrigationStartAtSpecificHour.state == NULL)
+		IrrigationStartAtSpecificHour.sendCommand(OFF)
+
+	if (IrrigationStartTime.state == NULL)	
+		IrrigationStartTime.sendCommand(20)
+
+	if (IrrigationHoursBeforeSunrise.state == NULL)
+		IrrigationHoursBeforeSunrise.sendCommand(1)
+
+	// // close all valves
+	// GroupIrrigationValves.members.filter[valve | valve.state != OFF].forEach[valve | valve.sendCommand(OFF)]
+
+	IrrigationCurrentValve.postUpdate(OFF)
+end
+
+rule "2 - Irrigation - calculate whether to start watering"
+when
+    Time cron "0 * * ? * *" // every minute
+then
+	// try {
+		logInfo(logName, "Calculating whether to start irrigation")
+
+		// calculate rainfall
+		SumRainLast24h.sendCommand((WeatherAndForecastCurrentRain.sumSince(now.minusHours(24), "influxdb") as Number).doubleValue)
+		SumRainNext24h.sendCommand(GroupForecastedRain24Sum.state as Number)
+
+		// wait to propagate item states - not sure if necessary
+		Thread.sleep(200)
+
+		logDebug(logName, "Rain - last 24h (sum): {} mm", String::format("%.2f", (SumRainLast24h.state as Number).doubleValue))
+		logDebug(logName, "Rain - forecast 24h (sum): {} mm", String::format("%.2f", (SumRainNext24h.state as Number).doubleValue))
+
+		///////////////////		
+		// start calculations, whether to start and for how long
+		///////////////////
+
+		// check for the manual lock
+		if (IrrigationLock.state == ON) {
+			logInfo(logName, "Irrigation lock is on")
+			return
+		}
+
+		// check the week day
+		val Number day = now.getDayOfWeek()
+		val dayItem = ScriptServiceUtil.getItemRegistry.getItem("IrrigationDay" + day)
+		
+		if (dayItem === null || dayItem.state == OFF || dayItem.state == NULL) {
+			logInfo(logName, "Inappropriate day to start irrigation", dayItem)
+			return
+		}
+
+		// set the default irrigation hour to X hours before the sunrise
+		val localSunRise = new DateTime(LocalSunRiseStart.state.toString).minusHours((IrrigationHoursBeforeSunrise.state as Number).intValue)
+		var Number wateringHour = localSunRise.getHourOfDay()
+		var Number wateringMinute = localSunRise.getMinuteOfHour()
+
+		// if there is a specific hour in settings, then use it
+		if (IrrigationStartAtSpecificHour.state == ON) {
+			wateringHour = IrrigationStartTime.state as Number
+			wateringMinute = 0
+		}
+
+		logInfo(logName, "Watering at: {}:{}", wateringHour, wateringMinute)
+
+		// check if the current time is the watering time (full hour)
+		if (now.getHourOfDay != wateringHour || now.getMinuteOfHour != wateringMinute) {
+			// nope - good bye
+			logInfo(logName, "Inappropriate time to start irrigation")
+			return
+		}
+		logInfo(logName, "It is watering hour: {}:{}", wateringHour, wateringMinute)
+
+		// check if the current wind speed is higher then the max allowed
+		logInfo(logName, "Current wind speed: {} km/h", String::format("%.2f", (WeatherAndForecastCurrentWindSpeed.state as Number).doubleValue))
+		if (WeatherAndForecastCurrentWindSpeed.state > MaxAllowedWindSpeed.state as Number) {
+			logInfo(logName, "Wind speed too high to irrigate")
+			return
+		}
+
+		// if the rainfall sum for the last 24h and the forecast for 24h is higher then set, then we are not going to irrigate
+		val rainSum = (SumRainLast24h.state as Number).doubleValue + (SumRainNext24h.state as Number).doubleValue
+		logInfo(logName, "Past and forcasted average rain: {} mm", String::format("%.2f", rainSum))
+		if (rainSum > (MaxAllowedRain.state as Number).doubleValue) {
+			logInfo(logName, "To heavy rain to irrigate (past and forcasted)")
+			return
+		}
+
+		// check the wether, and based on that set the watering time coefficient factor
+		// if the temperature is to low, don't start watering
+		val avgTemperatureLast24h = (WeatherAndForecastCurrentTemperature.averageSince(now.minusHours(24), "influxdb") as Number).doubleValue
+
+		logInfo(logName, "Average temperature for the last 24h: {}", avgTemperatureLast24h)
+
+		if (avgTemperatureLast24h <= 10) {
+			logInfo(logName, "Temperature too low to start irrigation")
+			return
+		} 
+		else if (avgTemperatureLast24h > 30) {
+			logInfo(logName, "Setting irrigation coefficient factor to 2")
+		} 
+		else {
+			// coefficient factor should be between 1 and 2
+			// this part could, and should be better
+			coefficientFactor = avgTemperatureLast24h / 10 - 1;
+			logInfo(logName, "Setting irrigation coefficient factor to {}", coefficientFactor)
+		}
+
+		///////////////////
+		// ok, let's start watering, cascading all of the valves from the GroupIrrigationValves
+		///////////////////
+
+		// starting with the Zone 1, other zones will be turned on in sequence by the separate rule
+		logInfo(logName, "Starting the irrigation sequence")
+		IrrigationCurrentValve.sendCommand(IrrigationValveZone1.name)
+	// }
+	// catch (Exception e) {
+    //     logError(logName, "Error calculating whether to start irrigation: " + e)
+    // }
+end
+
+rule "3 - Irrigation - cascading"
+when
+    Item IrrigationCurrentValve received command
+then
+	//try {
+		// get the currently open valve
+		// val currValve = GroupIrrigationValves.members.findFirst[valve | valve.name == receivedCommand.toString]
+		val currValveNum = Integer::parseInt(currValve.name.split("Zone").get(1))
+		// val currValveMins = GroupIrrigationTimes.members.findFirst[t | t.name == currValve.name+"Time" ].state as Number
+		logDebug(logName, "Current valve {}, duration {}", currValve.name, currValveMins)
+
+		// get the next valve in the sequence
+		val nextValveNum = currValveNum + 1
+		val nextValveName = "IrrigationValveZone" + nextValveNum
+		// val nextValve = GroupIrrigationValves.members.findFirst[valve | valve.name == nextValveName]
+		
+		// if there is no next valve in the sequence, then nextValve is null
+		if (nextValve === null)
+			logDebug(logName, "This is the last valve in the sequence")
+		else
+			logDebug(logName, "Next valve {}", nextValve.name)
+		
+		// open the current valve
+		val valveOpenTime = currValveMins * coefficientFactor
+		logInfo(logName, "Opening {} for {} mins", currValve.name, valveOpenTime)
+		currValve.sendCommand(ON)
+
+		IrrigationSectionRemainingTime.postUpdate(valveOpenTime.intValue)
+		
+		// set the timer, after expiring turn off the current valve and turn on the next one
+		// irrigationTimer = createTimer(now.plusMinutes(valveOpenTime.intValue), [ |
+			if (nextValve !== null) {
+				// this will invoke cascading valves, "Irrigation - cascading" rule
+				IrrigationCurrentValve.sendCommand(nextValve.name)
+			}
+			else {
+				logInfo(logName, "Irrigation is complete")
+			}
+
+			// let's wait for propagating item values
+			Thread::sleep(500)
+
+			// turn off current valve
+			logInfo(logName, "Closing " + currValve.name)
+			currValve.sendCommand(OFF)
+
+			irrigationTimer = null
+		// ])
+	// }
+	// catch (Exception e) {
+    //     logError(logName, "Error controlling cascading valves: " + e)
+    // }
+end
+
+// for displaying remaining irrigation time purpose only
+rule "4 - Irrigation - update timer"
+when
+  Time cron "0 * * ? * *" // every minute
+then
+	if (IrrigationSectionRemainingTime.state as Number > 0)
+		IrrigationSectionRemainingTime.postUpdate((IrrigationSectionRemainingTime.state as Number) - 1)
+end
+
+rule "5 - Irrigation - all valves closed"
+when
+	Item GroupIrrigationValves changed to OFF
+then
+	// set the current valve to OFF
+	logInfo(logName, "All irrigation valves closed")
+	IrrigationCurrentValve.postUpdate(OFF)
+
+	// reset the remaining time
+	IrrigationSectionRemainingTime.postUpdate(0)
+end
+
+rule "6 - Irrigation - valve updated, turn on the timer"
+when
+	Item GroupIrrigationValves changed 
+then
+	// protection against overwatering
+	
+	// // log the state of all valves
+	// GroupIrrigationValves.members.forEach [valve | 
+	// 	logDebug(logName, "Irrigation valve: " + valve.name + " " + valve.state)
+	// ]
+
+	// a valve was turned on
+	if (GroupIrrigationValves.state == ON) {
+		if (IrrigationTimerMax.state == OFF) {
+			// timer is not set yet, start the timer
+			logDebug(logName, "Irrigation valve open, starting protection timer")
+			IrrigationTimerMax.sendCommand(ON)
+		}
+		else {
+			// the timer is already running
+			logDebug(logName, "Irrigation valve open, timer already started, nothing to do")
+		}
+	}
+	else {
+		logDebug(logName, "All irrigation valves closed, stopping protection timer")
+		IrrigationTimerMax.postUpdate(OFF)
+	}
+	triggeringItem.postUpdate(triggeringItem.state)
+end
+
+rule "7 - Irrigation - protection timer off, close all valves"
+when
+	Item IrrigationTimerMax changed to OFF
+then
+	// protection timer expired - turn all valves off
+	logWarn(logName, "Irrigation protection timer expired - close all valves")
+
+	// // close all valves from the group
+	// GroupIrrigationValves.members.forEach [valve | 
+	// 	logDebug(logName, "Closing valve: " + valve.name)
+		valve.sendCommand(OFF)
+	// ]
+end

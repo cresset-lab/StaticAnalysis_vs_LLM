@@ -1,0 +1,199 @@
+FILE: detect-output\oh-rules\MiLight.rules
+------------------------------------------------
+THREATS DETECTED: 7
+SAC: 3
+WAC: 2
+STC: 0
+WTC: 0
+SCC: 2
+WCC: 0
+------------------------------------------------
+1. SAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a2)
+    
+    RULES:
+        RULE_A [r1]: ("1 - Milight_ID1_G1_ONOFF")
+        RULE_B [r2]: ("2 - Milight_ID1_G1_BRIGHT")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item milight_id1_g1_state received command 
+        
+        TRIGGERS_B:     [r2t1]: Item milight_id1_g1_brightness received command
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: milight_id1_g1_light.sendCommand('{"state":"' + receivedcommand + '"}')
+        ACTION_B:       [r2a2]: milight_id1_g1_light.sendCommand('{"state":"ON","level":' + ilevel + '}')
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+2. SAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r3a2)
+    
+    RULES:
+        RULE_A [r1]: ("1 - Milight_ID1_G1_ONOFF")
+        RULE_B [r3]: ("3 - Milight_ID1_G1_CT")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item milight_id1_g1_state received command 
+        
+        TRIGGERS_B:     [r3t1]: Item milight_id1_g1_ctemp received command
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: milight_id1_g1_light.sendCommand('{"state":"' + receivedcommand + '"}')
+        ACTION_B:       [r3a2]: milight_id1_g1_light.sendCommand('{"state":"ON","color_temp":' + ictemp + '}')
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+3. SAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r4a1)
+    
+    RULES:
+        RULE_A [r1]: ("1 - Milight_ID1_G1_ONOFF")
+        RULE_B [r4]: ("4 - Milight_ID1_G1_HUE")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: Item milight_id1_g1_state received command 
+        
+        TRIGGERS_B:     [r4t1]: Item milight_id1_g1_hue received command
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: milight_id1_g1_light.sendCommand('{"state":"' + receivedcommand + '"}')
+        ACTION_B:       [r4a1]: milight_id1_g1_light.sendCommand('{"state":"ON","level":' + ilevel + ',"hue":' + ihue + ',"saturation":' + isat + '}')
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+7. WAC THREAT DETECTED
+    THREAT PAIR: (r2a1, r5a1)
+    
+    RULES:
+        RULE_A [r2]: ("2 - Milight_ID1_G1_BRIGHT")
+        RULE_B [r5]: ("5 - Milight_ID1_G1_HubStates")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Item milight_id1_g1_brightness received command 
+        
+        TRIGGERS_B:     [r5t1]: Item milight_id1_g1_espmilighthub changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r2c1]: if (milight_id1_g1_state == off) 
+        
+        CONDITIONS_B:   [r5c1]: if (milight_id1_g1_state != sstate)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r2a1]: milight_id1_g1_state.postUpdate(on)
+        ACTION_B:       [r5a1]: milight_id1_g1_state.postUpdate(sstate)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+8. WAC THREAT DETECTED
+    THREAT PAIR: (r3a1, r5a1)
+    
+    RULES:
+        RULE_A [r3]: ("3 - Milight_ID1_G1_CT")
+        RULE_B [r5]: ("5 - Milight_ID1_G1_HubStates")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r3t1]: Item milight_id1_g1_ctemp received command 
+        
+        TRIGGERS_B:     [r5t1]: Item milight_id1_g1_espmilighthub changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r3c1]: if (milight_id1_g1_state == off) 
+        
+        CONDITIONS_B:   [r5c1]: if (milight_id1_g1_state != sstate)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r3a1]: milight_id1_g1_state.postUpdate(on)
+        ACTION_B:       [r5a1]: milight_id1_g1_state.postUpdate(sstate)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+9. SCC THREAT DETECTED
+    THREAT PAIR: (r2a1, r5c1)
+
+    RULES:
+        RULE_A:         [r2]: ("2 - Milight_ID1_G1_BRIGHT")
+        RULE_B:         [r5]: ("5 - Milight_ID1_G1_HubStates")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r2t1]: Item milight_id1_g1_brightness received command 
+        
+        TRIGGERS_B:     [r5t1]: Item milight_id1_g1_espmilighthub changed
+
+    GUARDING CONDITIONS:
+        CONDITIONS_A:   [r2c1]: if (milight_id1_g1_state == off) 
+
+    CONDITION-ACTION PAIR:
+        ACTION_A:       [r2a1]: milight_id1_g1_state.postUpdate(on) 
+
+        CONDITIONS_B:   [r5c1]: if (milight_id1_g1_state != sstate) 
+
+    RESULTING ACTION:
+        ACTION_B:       [r5a1]: milight_id1_g1_state.postUpdate(sstate) 
+
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    WHILE GUARDING CONDITIONS ARE ENABLED
+    THE CONDITION-ACTION PAIR
+    WILL CAUSE A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+
+10. SCC THREAT DETECTED
+    THREAT PAIR: (r3a1, r5c1)
+
+    RULES:
+        RULE_A:         [r3]: ("3 - Milight_ID1_G1_CT")
+        RULE_B:         [r5]: ("5 - Milight_ID1_G1_HubStates")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r3t1]: Item milight_id1_g1_ctemp received command 
+        
+        TRIGGERS_B:     [r5t1]: Item milight_id1_g1_espmilighthub changed
+
+    GUARDING CONDITIONS:
+        CONDITIONS_A:   [r3c1]: if (milight_id1_g1_state == off) 
+
+    CONDITION-ACTION PAIR:
+        ACTION_A:       [r3a1]: milight_id1_g1_state.postUpdate(on) 
+
+        CONDITIONS_B:   [r5c1]: if (milight_id1_g1_state != sstate) 
+
+    RESULTING ACTION:
+        ACTION_B:       [r5a1]: milight_id1_g1_state.postUpdate(sstate) 
+
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    WHILE GUARDING CONDITIONS ARE ENABLED
+    THE CONDITION-ACTION PAIR
+    WILL CAUSE A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+

@@ -1,0 +1,60 @@
+FILE: detect-output\iotb-rules\HallEntrada.rules
+------------------------------------------------
+THREATS DETECTED: 2
+SAC: 0
+WAC: 0
+STC: 2
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+1. STC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2t1)
+
+    RULES:
+        RULE_A [r1]: ("Luz do hall da sala de estar mudou")
+        RULE_B [r2]: ("Luz do hall do quarto de brinquedo mudou")
+
+    INITIAL TRIGGER:
+        TRIGGERS_A:     [r1t1]: Item luz_gter_salaestar_hall changed
+
+    TRIGGER-ACTION PAIR:
+        ACTION_A:       [r1a1]: luz_gter_brinquedo_hall.sendCommand(luz_gter_salaestar_hall.state.tostring)
+        TRIGGER_B:      [r2t1]: Item luz_gter_brinquedo_hall changed
+        
+    RESULTING ACTION:
+        ACTION_B:       [r2a1]: luz_gter_salaestar_hall.sendCommand(luz_gter_brinquedo_hall.state.tostring)
+    
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    THE TRIGGER-ACTION PAIR CAUSES 
+    A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+
+2. STC THREAT DETECTED
+    THREAT PAIR: (r2a1, r1t1)
+
+    RULES:
+        RULE_A [r2]: ("Luz do hall do quarto de brinquedo mudou")
+        RULE_B [r1]: ("Luz do hall da sala de estar mudou")
+
+    INITIAL TRIGGER:
+        TRIGGERS_A:     [r2t1]: Item luz_gter_brinquedo_hall changed
+
+    TRIGGER-ACTION PAIR:
+        ACTION_A:       [r2a1]: luz_gter_salaestar_hall.sendCommand(luz_gter_brinquedo_hall.state.tostring)
+        TRIGGER_B:      [r1t1]: Item luz_gter_salaestar_hall changed
+        
+    RESULTING ACTION:
+        ACTION_B:       [r1a1]: luz_gter_brinquedo_hall.sendCommand(luz_gter_salaestar_hall.state.tostring)
+    
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    THE TRIGGER-ACTION PAIR CAUSES 
+    A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+

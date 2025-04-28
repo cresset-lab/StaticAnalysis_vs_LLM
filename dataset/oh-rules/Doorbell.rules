@@ -1,0 +1,29 @@
+// https://community.openhab.org/t/working-doorbell-hikvision-ds-hd1/102487
+
+rule "Auto Front Doorbell"
+	when
+	Item Doorbell_PIRAlarm changed to ON
+	then
+		//KitchenHomeHubPlayURI.sendCommand("http://192.168.1.2:54321/ipcamera.jpg")	//can send jpg whilst GIF is recorded.
+        if (Doorbell_RecordingMP4.state == 0 || Doorbell_RecordingMP4.state == NULL){
+		var DoorbellMp4TimeStamp = new DateTimeType().format("%1$ty-%1$tm-%1$td_%1$tH-%1$tM-%1$tS").toString
+		//may run out of streams if recording to 2 formats and watching unless you use gifPreroll.
+        getActions("ipcamera", "ipcamera:onvif:Doorbell").recordGIF("ipcamera",5)
+		getActions("ipcamera", "ipcamera:onvif:Doorbell").recordMP4(DoorbellMp4TimeStamp,5)
+		}
+		if (BabyMonitor.state==ON){
+			KitchenHomeHubVolume.sendCommand(30)
+			sendBroadcastNotification("Someone is at the door and baby is alseep.")
+		}   else {
+			KitchenHomeHubVolume.sendCommand(70)			
+		} 
+		KitchenHomeHubPlayURI.sendCommand("http://192.168.1.2:8080/static/doorbell.mp3")      
+end
+
+rule "Send doorbell GIF to HomeHub and Pushover"
+when
+	Item Doorbell_recordingGif changed to 0
+then
+	KitchenHomeHubPlayURI.sendCommand("http://192.168.1.2:54321/ipcamera.gif")
+	sendPushoverMessage(pushoverBuilder("GIF from Doorbell").withApiKey("xxxxxxxxxx").withUser("xxxxxxxxxxx").withDevice("MattPhone").withAttachment("/etc/openhab2/html/Doorbell/ipcamera.gif"))
+end

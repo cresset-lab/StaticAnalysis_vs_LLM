@@ -1,0 +1,645 @@
+FILE: detect-output\iotb-rules\presence.rules
+------------------------------------------------
+THREATS DETECTED: 20
+SAC: 0
+WAC: 20
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+1. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a2)
+    
+    RULES:
+        RULE_A [r1]: ("Presence reset at startup")
+        RULE_B [r2]: ("Presence evaluation")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Time cron 0 0/1 * * * ?
+                    OR  [r2t2]: Item cgmotion changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c3]: if (nstatus_presence == unknown)
+                    AND [r2c4]: if (salarm_full != on)
+                    AND [r2c5]: if (cgmotion == open)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: nstatus_presence.postUpdate(0)
+        ACTION_B:       [r2a2]: nstatus_presence.postUpdate(home)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+2. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a3)
+    
+    RULES:
+        RULE_A [r1]: ("Presence reset at startup")
+        RULE_B [r2]: ("Presence evaluation")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Time cron 0 0/1 * * * ?
+                    OR  [r2t2]: Item cgmotion changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c3]: if (nstatus_presence == unknown)
+                    AND [r2c6]: if (timernomotion >= verylongtime)
+                    AND [r2c7]: if (currenthour >= latemorninghour)
+                    AND [r2c8]: if (cgmotion == closed)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: nstatus_presence.postUpdate(0)
+        ACTION_B:       [r2a3]: nstatus_presence.postUpdate(nobodyhome)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+3. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a4)
+    
+    RULES:
+        RULE_A [r1]: ("Presence reset at startup")
+        RULE_B [r2]: ("Presence evaluation")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Time cron 0 0/1 * * * ?
+                    OR  [r2t2]: Item cgmotion changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c9]: if (nstatus_presence == home)
+                    AND [r2c10]: if (cgmotion == closed)
+                    AND [r2c11]: if (salarm_full == on)
+                    AND [r2c12]: if (timernomotion >= shorttime)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: nstatus_presence.postUpdate(0)
+        ACTION_B:       [r2a4]: nstatus_presence.postUpdate(away)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+4. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a5)
+    
+    RULES:
+        RULE_A [r1]: ("Presence reset at startup")
+        RULE_B [r2]: ("Presence evaluation")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Time cron 0 0/1 * * * ?
+                    OR  [r2t2]: Item cgmotion changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c9]: if (nstatus_presence == home)
+                    AND [r2c10]: if (cgmotion == closed)
+                    AND [r2c13]: if (currenthour < morninghour)
+                    AND [r2c15]: if (strlastmotionloc == 'Upstairs')
+                    AND [r2c17]: if (timernomotion >= sometime)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: nstatus_presence.postUpdate(0)
+        ACTION_B:       [r2a5]: nstatus_presence.postUpdate(tobed)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+5. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a6)
+    
+    RULES:
+        RULE_A [r1]: ("Presence reset at startup")
+        RULE_B [r2]: ("Presence evaluation")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Time cron 0 0/1 * * * ?
+                    OR  [r2t2]: Item cgmotion changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c9]: if (nstatus_presence == home)
+                    AND [r2c10]: if (cgmotion == closed)
+                    AND [r2c19]: if (ngmobilephones == 0)
+                    AND [r2c20]: if (cgentrances == closed)
+                    AND [r2c21]: if (timernomotion >= shorttime)
+                    AND [r2c22]: if (strlastmotionloc == 'GardenDoor')
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: nstatus_presence.postUpdate(0)
+        ACTION_B:       [r2a6]: nstatus_presence.postUpdate(nobodyhome)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+6. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a7)
+    
+    RULES:
+        RULE_A [r1]: ("Presence reset at startup")
+        RULE_B [r2]: ("Presence evaluation")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Time cron 0 0/1 * * * ?
+                    OR  [r2t2]: Item cgmotion changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c9]: if (nstatus_presence == home)
+                    AND [r2c10]: if (cgmotion == closed)
+                    AND [r2c24]: if (ngmobilephones <= 1)
+                    AND [r2c25]: if (cgentrances == closed)
+                    AND [r2c26]: if (timernomotion >= sometime)
+                    AND [r2c27]: if (strlastmotionloc == 'GardenDoor')
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: nstatus_presence.postUpdate(0)
+        ACTION_B:       [r2a7]: nstatus_presence.postUpdate(nobodyhome)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+7. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a8)
+    
+    RULES:
+        RULE_A [r1]: ("Presence reset at startup")
+        RULE_B [r2]: ("Presence evaluation")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Time cron 0 0/1 * * * ?
+                    OR  [r2t2]: Item cgmotion changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c9]: if (nstatus_presence == home)
+                    AND [r2c10]: if (cgmotion == closed)
+                    AND [r2c29]: if (ngmobilephones == 0)
+                    AND [r2c30]: if (timernomotion >= sometime)
+                    AND [r2c31]: if (strlastmotionloc == 'Downstairs')
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: nstatus_presence.postUpdate(0)
+        ACTION_B:       [r2a8]: nstatus_presence.postUpdate(nobodyhome)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+8. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a9)
+    
+    RULES:
+        RULE_A [r1]: ("Presence reset at startup")
+        RULE_B [r2]: ("Presence evaluation")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Time cron 0 0/1 * * * ?
+                    OR  [r2t2]: Item cgmotion changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c9]: if (nstatus_presence == home)
+                    AND [r2c10]: if (cgmotion == closed)
+                    AND [r2c34]: if (cgentrances == closed)
+                    AND [r2c35]: if (timernomotion >= verylongtime)
+                    AND [r2c36]: if (strlastmotionloc == 'Downstairs')
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: nstatus_presence.postUpdate(0)
+        ACTION_B:       [r2a9]: nstatus_presence.postUpdate(nobodyhome)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+9. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a10)
+    
+    RULES:
+        RULE_A [r1]: ("Presence reset at startup")
+        RULE_B [r2]: ("Presence evaluation")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Time cron 0 0/1 * * * ?
+                    OR  [r2t2]: Item cgmotion changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c39]: if (nstatus_presence == camehome)
+                    AND [r2c40]: if (cgmotion == open)
+                    AND [r2c41]: if (salarm_full != on)
+                    AND [r2c42]: if (timermotion >= shorttime)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: nstatus_presence.postUpdate(0)
+        ACTION_B:       [r2a10]: nstatus_presence.postUpdate(home)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+10. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a11)
+    
+    RULES:
+        RULE_A [r1]: ("Presence reset at startup")
+        RULE_B [r2]: ("Presence evaluation")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Time cron 0 0/1 * * * ?
+                    OR  [r2t2]: Item cgmotion changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c39]: if (nstatus_presence == camehome)
+                    AND [r2c43]: if (cgentrances == closed)
+                    AND [r2c44]: if (cgmotion == closed)
+                    AND [r2c45]: if (timernomotion >= shorttime)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: nstatus_presence.postUpdate(0)
+        ACTION_B:       [r2a11]: nstatus_presence.postUpdate(nobodyhome)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+11. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a12)
+    
+    RULES:
+        RULE_A [r1]: ("Presence reset at startup")
+        RULE_B [r2]: ("Presence evaluation")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Time cron 0 0/1 * * * ?
+                    OR  [r2t2]: Item cgmotion changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c46]: if (nstatus_presence == awake)
+                    AND [r2c47]: if (timermotion >= veryshorttime)
+                    AND [r2c48]: if (currenthour >= earlymorninghour)
+                    AND [r2c49]: if (csensor_living_motion == open)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: nstatus_presence.postUpdate(0)
+        ACTION_B:       [r2a12]: nstatus_presence.postUpdate(home)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+12. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a13)
+    
+    RULES:
+        RULE_A [r1]: ("Presence reset at startup")
+        RULE_B [r2]: ("Presence evaluation")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Time cron 0 0/1 * * * ?
+                    OR  [r2t2]: Item cgmotion changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c46]: if (nstatus_presence == awake)
+                    AND [r2c50]: if (strlastmotionloc == 'Upstairs')
+                    AND [r2c51]: if (timernomotion >= shorttime)
+                    AND [r2c52]: if (cgmotion == closed)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: nstatus_presence.postUpdate(0)
+        ACTION_B:       [r2a13]: nstatus_presence.postUpdate(asleep)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+13. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a14)
+    
+    RULES:
+        RULE_A [r1]: ("Presence reset at startup")
+        RULE_B [r2]: ("Presence evaluation")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Time cron 0 0/1 * * * ?
+                    OR  [r2t2]: Item cgmotion changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c53]: if (nstatus_presence == tobed)
+                    AND [r2c54]: if (cgmotion == open)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: nstatus_presence.postUpdate(0)
+        ACTION_B:       [r2a14]: nstatus_presence.postUpdate(home)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+14. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a15)
+    
+    RULES:
+        RULE_A [r1]: ("Presence reset at startup")
+        RULE_B [r2]: ("Presence evaluation")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Time cron 0 0/1 * * * ?
+                    OR  [r2t2]: Item cgmotion changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c53]: if (nstatus_presence == tobed)
+                    AND [r2c55]: if (currenthour < earlymorninghour)
+                    AND [r2c56]: if (timernomotion >= verylongtime)
+                    AND [r2c57]: if (cgmotion == closed)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: nstatus_presence.postUpdate(0)
+        ACTION_B:       [r2a15]: nstatus_presence.postUpdate(asleep)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+15. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a16)
+    
+    RULES:
+        RULE_A [r1]: ("Presence reset at startup")
+        RULE_B [r2]: ("Presence evaluation")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Time cron 0 0/1 * * * ?
+                    OR  [r2t2]: Item cgmotion changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c58]: if (nstatus_presence == asleep)
+                    AND [r2c59]: if (csensor_firstfl_motion == open)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: nstatus_presence.postUpdate(0)
+        ACTION_B:       [r2a16]: nstatus_presence.postUpdate(awake)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+16. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a17)
+    
+    RULES:
+        RULE_A [r1]: ("Presence reset at startup")
+        RULE_B [r2]: ("Presence evaluation")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Time cron 0 0/1 * * * ?
+                    OR  [r2t2]: Item cgmotion changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c60]: if (nstatus_presence == nobodyhome)
+                    AND [r2c61]: if (salarm_full == on)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: nstatus_presence.postUpdate(0)
+        ACTION_B:       [r2a17]: nstatus_presence.postUpdate(away)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+17. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a18)
+    
+    RULES:
+        RULE_A [r1]: ("Presence reset at startup")
+        RULE_B [r2]: ("Presence evaluation")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Time cron 0 0/1 * * * ?
+                    OR  [r2t2]: Item cgmotion changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c60]: if (nstatus_presence == nobodyhome)
+                    AND [r2c62]: if (cgmotion == open)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: nstatus_presence.postUpdate(0)
+        ACTION_B:       [r2a18]: nstatus_presence.postUpdate(camehome)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+18. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a19)
+    
+    RULES:
+        RULE_A [r1]: ("Presence reset at startup")
+        RULE_B [r2]: ("Presence evaluation")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Time cron 0 0/1 * * * ?
+                    OR  [r2t2]: Item cgmotion changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c63]: if (nstatus_presence == away)
+                    AND [r2c64]: if (cgmotion == open)
+                    AND [r2c66]: if (salarm_full == off)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: nstatus_presence.postUpdate(0)
+        ACTION_B:       [r2a19]: nstatus_presence.postUpdate(camehome)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+19. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a20)
+    
+    RULES:
+        RULE_A [r1]: ("Presence reset at startup")
+        RULE_B [r2]: ("Presence evaluation")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Time cron 0 0/1 * * * ?
+                    OR  [r2t2]: Item cgmotion changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c63]: if (nstatus_presence == away)
+                    AND [r2c64]: if (cgmotion == open)
+                    AND [r2c67]: if (salarm_full != off)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: nstatus_presence.postUpdate(0)
+        ACTION_B:       [r2a20]: nstatus_presence.postUpdate(unknown)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+20. WAC THREAT DETECTED
+    THREAT PAIR: (r1a1, r2a21)
+    
+    RULES:
+        RULE_A [r1]: ("Presence reset at startup")
+        RULE_B [r2]: ("Presence evaluation")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r1t1]: System started 
+        
+        TRIGGERS_B:     [r2t1]: Time cron 0 0/1 * * * ?
+                    OR  [r2t2]: Item cgmotion changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r2c63]: if (nstatus_presence == away)
+                    AND [r2c65]: if (cgmotion != open)
+                    AND [r2c68]: if (salarm_full == off)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r1a1]: nstatus_presence.postUpdate(0)
+        ACTION_B:       [r2a21]: nstatus_presence.postUpdate(nobodyhome)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+

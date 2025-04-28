@@ -1,0 +1,164 @@
+FILE: detect-output\oh-rules\OwnTracks.rules
+------------------------------------------------
+THREATS DETECTED: 6
+SAC: 3
+WAC: 3
+STC: 0
+WTC: 0
+SCC: 0
+WCC: 0
+------------------------------------------------
+1. SAC THREAT DETECTED
+    THREAT PAIR: (r4a1, r6a1)
+    
+    RULES:
+        RULE_A [r4]: ("4 - Daddy's Home")
+        RULE_B [r6]: ("6 - Josh gets to work")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r4t1]: Item phone_josh changed to on 
+        
+        TRIGGERS_B:     [r6t1]: Item phone_josh_work received update on
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r4a1]: josh.postUpdate("Home")
+        ACTION_B:       [r6a1]: josh.postUpdate("Work")
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+2. SAC THREAT DETECTED
+    THREAT PAIR: (r4a1, r7a1)
+    
+    RULES:
+        RULE_A [r4]: ("4 - Daddy's Home")
+        RULE_B [r7]: ("7 - Josh leaves work in Afternoon")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r4t1]: Item phone_josh changed to on 
+        
+        TRIGGERS_B:     [r7t1]: Item phone_josh_work received update off
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r4a1]: josh.postUpdate("Home")
+        ACTION_B:       [r7a1]: josh.postUpdate("Away")
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+3. SAC THREAT DETECTED
+    THREAT PAIR: (r5a1, r6a1)
+    
+    RULES:
+        RULE_A [r5]: ("5 - Josh leaves home")
+        RULE_B [r6]: ("6 - Josh gets to work")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r5t1]: Item phone_josh received update off 
+        
+        TRIGGERS_B:     [r6t1]: Item phone_josh_work received update on
+    
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r5a1]: josh.postUpdate("Away")
+        ACTION_B:       [r6a1]: josh.postUpdate("Work")
+    
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+4. WAC THREAT DETECTED
+    THREAT PAIR: (r3a1, r6a1)
+    
+    RULES:
+        RULE_A [r3]: ("3 - System Start")
+        RULE_B [r6]: ("6 - Josh gets to work")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r3t1]: System started 
+        
+        TRIGGERS_B:     [r6t1]: Item phone_josh_work received update on
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r3c1]: if (phone_josh == on) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r3a1]: josh.postUpdate("Home")
+        ACTION_B:       [r6a1]: josh.postUpdate("Work")
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+5. WAC THREAT DETECTED
+    THREAT PAIR: (r3a1, r7a1)
+    
+    RULES:
+        RULE_A [r3]: ("3 - System Start")
+        RULE_B [r7]: ("7 - Josh leaves work in Afternoon")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r3t1]: System started 
+        
+        TRIGGERS_B:     [r7t1]: Item phone_josh_work received update off
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r3c1]: if (phone_josh == on) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r3a1]: josh.postUpdate("Home")
+        ACTION_B:       [r7a1]: josh.postUpdate("Away")
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+6. WAC THREAT DETECTED
+    THREAT PAIR: (r3a2, r5a1)
+    
+    RULES:
+        RULE_A [r3]: ("3 - System Start")
+        RULE_B [r5]: ("5 - Josh leaves home")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r3t1]: System started 
+        
+        TRIGGERS_B:     [r5t1]: Item phone_josh received update off
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [r3c2]: if (phone_josh != on)
+                    AND [r3c3]: if (phone_josh_work == on) 
+        
+        CONDITIONS_B:   [c0]:   no conditions guarding action
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r3a2]: josh.postUpdate("Work")
+        ACTION_B:       [r5a1]: josh.postUpdate("Away")
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+

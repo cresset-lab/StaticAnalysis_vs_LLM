@@ -1,0 +1,183 @@
+FILE: detect-output\iotb-rules\lightscenes.rules
+------------------------------------------------
+THREATS DETECTED: 6
+SAC: 0
+WAC: 4
+STC: 0
+WTC: 1
+SCC: 1
+WCC: 0
+------------------------------------------------
+1. WAC THREAT DETECTED
+    THREAT PAIR: (r7a1, r14a1)
+    
+    RULES:
+        RULE_A [r7]: ("First floor Scene 0 - lights off")
+        RULE_B [r14]: ("FF Actuator 1")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r7t1]: Item nscene_ff_lights received command 0 
+        
+        TRIGGERS_B:     [r14t1]: Item slight_firstfl_act01 changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r14c1]: if (slight_firstfl_act01 == on)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r7a1]: slight_firstfl_corridor.sendCommand(off)
+        ACTION_B:       [r14a1]: slight_firstfl_corridor.sendCommand(on)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+2. WAC THREAT DETECTED
+    THREAT PAIR: (r7a9, r15a1)
+    
+    RULES:
+        RULE_A [r7]: ("First floor Scene 0 - lights off")
+        RULE_B [r15]: ("CR Actuator 1")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r7t1]: Item nscene_ff_lights received command 0 
+        
+        TRIGGERS_B:     [r15t1]: Item slight_kidsroom_act01 changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r15c1]: if (slight_kidsroom_act01 == on)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r7a9]: slight_kidsroom_02.sendCommand(off)
+        ACTION_B:       [r15a1]: slight_kidsroom_02.sendCommand(on)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+3. WAC THREAT DETECTED
+    THREAT PAIR: (r10a1, r14a2)
+    
+    RULES:
+        RULE_A [r10]: ("First floor Scene 7 - fire alarm")
+        RULE_B [r14]: ("FF Actuator 1")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r10t1]: Item nscene_ff_lights received command 7 
+        
+        TRIGGERS_B:     [r14t1]: Item slight_firstfl_act01 changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r14c2]: if (slight_firstfl_act01 == off)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r10a1]: slight_firstfl_corridor.sendCommand(on)
+        ACTION_B:       [r14a2]: slight_firstfl_corridor.sendCommand(off)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+4. WAC THREAT DETECTED
+    THREAT PAIR: (r12a1, r14a2)
+    
+    RULES:
+        RULE_A [r12]: ("First floor Scene 9 - full alarm")
+        RULE_B [r14]: ("FF Actuator 1")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r12t1]: Item nscene_ff_lights received command 9 
+        
+        TRIGGERS_B:     [r14t1]: Item slight_firstfl_act01 changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r14c2]: if (slight_firstfl_act01 == off)
+
+    CONTRADICTORY ACTIONS:
+        ACTION_A:       [r12a1]: slight_firstfl_corridor.sendCommand(on)
+        ACTION_B:       [r14a2]: slight_firstfl_corridor.sendCommand(off)
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED
+    CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER
+    WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+------------------------------------------------
+
+5. WTC THREAT DETECTED
+    THREAT PAIR: (r7a10, r15t1)
+
+    RULES:
+        RULE_A:         [r7]: ("First floor Scene 0 - lights off")
+        RULE_B:         [r15]: ("CR Actuator 1")
+
+    INITIAL TRIGGER:
+        TRIGGERS_A:     [r7t1]: Item nscene_ff_lights received command 0
+
+    TRIGGER-ACTION PAIR
+        ACTION_A:       [r7a10]: slight_kidsroom_act01.sendCommand(off)
+        TRIGGER_B:      [r15t1]: Item slight_kidsroom_act01 changed
+
+    OVERLAPPING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+        
+        CONDITIONS_B:   [r15c2]: if (slight_kidsroom_act01 == off)
+
+    RESULTING ACTION:
+        ACTION_B:       [r15a2]: slight_kidsroom_02.sendCommand(off)
+
+    THREAT DESCRIPTION:
+    WHEN INITIAL TRIGGER IS ACTIVATED
+    IF OVERLAPPING SETS OF CONDITIONS ARE CONCURRENTLY ENABLED
+    THE TRIGGER-ACTION PAIR CAUSES A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+
+6. SCC THREAT DETECTED
+    THREAT PAIR: (r7a10, r15c2)
+
+    RULES:
+        RULE_A:         [r7]: ("First floor Scene 0 - lights off")
+        RULE_B:         [r15]: ("CR Actuator 1")
+
+    OVERLAPPING TRIGGERS:
+        TRIGGERS_A:     [r7t1]: Item nscene_ff_lights received command 0 
+        
+        TRIGGERS_B:     [r15t1]: Item slight_kidsroom_act01 changed
+
+    GUARDING CONDITIONS:
+        CONDITIONS_A:   [c0]:   no conditions guarding action 
+
+    CONDITION-ACTION PAIR:
+        ACTION_A:       [r7a10]: slight_kidsroom_act01.sendCommand(off) 
+
+        CONDITIONS_B:   [r15c2]: if (slight_kidsroom_act01 == off) 
+
+    RESULTING ACTION:
+        ACTION_B:       [r15a2]: slight_kidsroom_02.sendCommand(off) 
+
+
+    THREAT DESCRIPTION: 
+    IF OVERLAPPING SETS OF TRIGGERS ARE CONCURRENTLY ACTIVATED
+    WHILE GUARDING CONDITIONS ARE ENABLED
+    THE CONDITION-ACTION PAIR
+    WILL CAUSE A CHAIN OF ACTION EXECUTIONS.
+
+------------------------------------------------
+
