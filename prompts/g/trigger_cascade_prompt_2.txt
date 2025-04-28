@@ -1,0 +1,71 @@
+You will be given a TRIGGER-ACTION pair along with two interacting openHAB rules. Your task is to evaluate whether the trigger cascade is safe and intended by the user or if it could lead to unexpected or unwanted behavior.
+
+A trigger cascade occurs when an action in one rule triggers another rule, potentially creating a chain reaction. While many trigger cascades are intentional, if the interaction creates an infinite loop or any unintended chain reaction, it is considered a threat.
+
+Example:
+```
+rule "Watch TV at 9pm on weekdays"
+when
+    Time cron "0 21 * * 1-5"
+then
+    if (MyLocation.state == "home")
+        postUpdate(TV, ON)
+end
+
+rule "Open windows for TV watching"
+when
+    Item TV received update ON
+then
+    if (LivingRoom_Temp.state > 25)
+        postUpdate(LivingRoom_Window, OPEN)
+end
+
+Risk: Unintended window operation when TV turns on automatically. This could lead to the window being opened unintentionally. This should be labeled as TP.
+```
+
+
+Example 2: 
+```
+rule "0 Time Printed String"
+when
+    Item OctoprintJobPrintTime changed
+then
+    val seconds = (OctoprintJobPrintTime.state as DecimalType).intValue
+    val int totalMinutes = seconds / 60
+    val int remainderSecs = seconds % 60
+    val int totalHours = totalMinutes / 60
+    val int remainderMins = totalMinutes % 60
+    val formattedTime = String :: format("%02d", totalHours) + ":" + String :: format("%02d", remainderMins) + ":" + String ::
+      format("%02d", remainderSecs)
+    OctoprintJobPrintTimeString.postUpdate(formattedTime)
+
+end
+
+rule "1 Time Left String"
+when
+    Item OctoprintJobPrintTimeString received update
+then
+    val seconds = (OctoprintJobPrintTimeLeft.state as DecimalType).intValue
+    val int totalMinutes = seconds / 60
+    val int remainderSecs = seconds % 60
+    val int totalHours = totalMinutes / 60
+    val int remainderMins = totalMinutes % 60
+    val formattedTime = String :: format("%02d", totalHours) + ":" + String :: format("%02d", remainderMins) + ":" + String ::
+      format("%02d", remainderSecs)
+    OctoprintJobPrintTimeLeftString.postUpdate(formattedTime)
+    val DateTime OctoprintETA = now.plusSeconds(seconds)
+    OctoprintJobPrintETAString.postUpdate(OctoprintETA.toString)
+    OctoprintJobPrintETADateTime.postUpdate(new DateTimeType (OctoprintETA.toString))
+
+end
+
+Risk: There is no risk. The action of the first rule triggers the second rule, just like the user intended. This one should be labeled as FP
+```
+Use your best judgment:
+- If the interaction creates an infinite loop or any unintended chain reaction, output **TP**.
+- If the interaction creates potentially unwanted or unexpected behaviour, output **TP**
+- If the cascade appears safe and likely intended by the user, output **FP**. (keep in mind that most cascades are likely intended by the user)
+
+Return only the 2-letter acronym (TP or FP) with no additional explanation, reasoning, or text.
+
+The candidate rules and the trigger-action pair that you must analyze are:  

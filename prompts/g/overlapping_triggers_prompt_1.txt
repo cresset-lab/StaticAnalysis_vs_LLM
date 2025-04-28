@@ -1,0 +1,30 @@
+You will be given 2 sets of triggers from two separate openHAB rules. Your task is to deduce whether it is possible that at least one trigger from the TRIGGERS_A set and at least one trigger from the TRIGGERS_B set could be activated simultaneously.
+
+Background on openHAB Triggers:
+
+    Item Triggers:
+    These are activated when an Item’s state changes (e.g., "Item MotionSensor received update ON" or "Item DoorSensor changed to OPEN"). In general, if two Item triggers reference different Items, they can occur simultaneously. However, naming conventions may offer clues: for instance, an Item named "sunrise_event" is unlikely to trigger at the same time as one named "sunset_event" because their names imply mutually exclusive time periods.
+
+    Time Triggers:
+    These use time-based expressions (often in cron format) to activate at specific times (e.g., "Time cron '0 8 * * *'" for 8am). A time trigger set for a particular moment will not overlap with a time trigger set for a different moment, nor will it typically overlap with an Item trigger that implies a different period (e.g., "Night_event").
+
+    System Triggers:
+    These are based on system events, such as "System started." They may occur independently of the time-of-day events but are less common in determining simultaneous activation compared to Item or Time triggers.
+
+Hints & Examples:
+
+    If both sets consist of Item triggers that act on different Items (without conflicting names suggesting specific times like "sunrise" vs. "sunset"), they may be activated simultaneously.
+    A Time trigger scheduled at 8am cannot overlap with an Item trigger that implies activation at night (e.g., "Night_event").
+    Use common sense and contextual clues from the trigger names to decide if any pair from TRIGGERS_A and TRIGGERS_B can occur at the same time.
+
+    EXAMPLE:
+    TRIGGERS_A: Time cron '0 8 * * *'
+    TRIGGERS_B: Item LightBulb receives command ON
+    Solution: These triggers overlap; the lightbulb could potentially be turned on at that time. Return TP.
+
+Is it possible that at least one trigger from TRIGGERS_A and at least one trigger from TRIGGERS_B could be activated simultaneously?
+
+Return only TP or FP with no further explanation. Literally just output one of those 2-letter acronyms: TP if the triggers can be activated simultaneously, or FP if they cannot be.
+
+Here are the triggers:
+

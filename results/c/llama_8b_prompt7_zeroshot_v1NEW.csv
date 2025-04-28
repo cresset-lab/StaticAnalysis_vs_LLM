@@ -1,0 +1,146 @@
+file_name,rules,trad_result,LLM_result
+detect-output/oh-rules/LightingScene.rules,"['""Lighting Scene Wakeup""', '""Lighting Scene Evening""']", SAC,"AC,TC"
+detect-output/oh-rules/MiLight.rules,"['""1 - Milight_ID1_G1_ONOFF""', '""2 - Milight_ID1_G1_BRIGHT""']", SAC,AC
+detect-output/oh-rules/MiLight.rules,"['""1 - Milight_ID1_G1_ONOFF""', '""3 - Milight_ID1_G1_CT""']", SAC,"AC,TC"
+detect-output/oh-rules/MiLight.rules,"['""1 - Milight_ID1_G1_ONOFF""', '""4 - Milight_ID1_G1_HUE""']", SAC,AC
+detect-output/oh-rules/MiLight.rules,"['""2 - Milight_ID1_G1_BRIGHT""', '""5 - Milight_ID1_G1_HubStates""']", WAC,"AC,TC"
+detect-output/oh-rules/MiLight.rules,"['""3 - Milight_ID1_G1_CT""', '""5 - Milight_ID1_G1_HubStates""']", WAC,"AC,TC"
+detect-output/oh-rules/MiLight.rules,"['""2 - Milight_ID1_G1_BRIGHT""', '""5 - Milight_ID1_G1_HubStates""']", SCC,"AC,TC"
+detect-output/oh-rules/MiLight.rules,"['""3 - Milight_ID1_G1_CT""', '""5 - Milight_ID1_G1_HubStates""']", SCC,AC
+detect-output/oh-rules/WateringSystem.rules,"['""1 Watering_garden_startup""', '""7 Watering_starting/stoping""']", WAC,AC
+detect-output/oh-rules/WateringSystem.rules,"['""1 Watering_garden_startup""', '""7 Watering_starting/stoping""']", WAC,AC
+detect-output/oh-rules/WateringSystem.rules,"['""1 Watering_garden_startup""', '""7 Watering_starting/stoping""']", WAC,AC
+detect-output/oh-rules/WateringSystem.rules,"['""2 Rain_sensor_rain_activated""', '""6 Watering_manual_start/stop""']", WAC,"AC,TC"
+detect-output/oh-rules/WateringSystem.rules,"['""2 Rain_sensor_rain_activated""', '""8 Watering_algorithm""']", WAC,"AC,TC"
+detect-output/oh-rules/WateringSystem.rules,"['""2 Rain_sensor_rain_activated""', '""8 Watering_algorithm""']", WAC,"AC,TC"
+detect-output/oh-rules/Doorbell.rules,"['""Auto Front Doorbell""', '""Send doorbell GIF to HomeHub and Pushover""']", SAC,"AC,TC"
+detect-output/oh-rules/irrigation.rules,"['""1 Irrigation - system start""', '""2 - Irrigation - calculate whether to start watering""']", SAC,"AC,TC"
+detect-output/oh-rules/irrigation.rules,"['""2 - Irrigation - calculate whether to start watering""', '""5 - Irrigation - all valves closed""']", SAC,"AC,TC"
+detect-output/oh-rules/irrigation.rules,"['""3 - Irrigation - cascading""', '""5 - Irrigation - all valves closed""']", SAC,"AC,TC"
+detect-output/oh-rules/irrigation.rules,"['""1 Irrigation - system start""', '""2 - Irrigation - calculate whether to start watering""']", WAC,"AC,TC"
+detect-output/oh-rules/irrigation.rules,"['""1 Irrigation - system start""', '""2 - Irrigation - calculate whether to start watering""']", WAC,"AC,TC"
+detect-output/oh-rules/irrigation.rules,"['""1 Irrigation - system start""', '""3 - Irrigation - cascading""']", WAC,"AC,TC"
+detect-output/oh-rules/irrigation.rules,"['""2 - Irrigation - calculate whether to start watering""', '""3 - Irrigation - cascading""']", WAC,"AC,TC"
+detect-output/oh-rules/irrigation.rules,"['""3 - Irrigation - cascading""', '""4 - Irrigation - update timer""']", WAC,"AC,TC"
+detect-output/oh-rules/irrigation.rules,"['""3 - Irrigation - cascading""', '""5 - Irrigation - all valves closed""']", WAC,"AC,TC"
+detect-output/oh-rules/irrigation.rules,"['""4 - Irrigation - update timer""', '""5 - Irrigation - all valves closed""']", WAC,AC
+detect-output/oh-rules/OwnTracks.rules,"['""4 - Daddy\'s Home""', '""6 - Josh gets to work""']", SAC,AC
+detect-output/oh-rules/OwnTracks.rules,"['""4 - Daddy\'s Home""', '""7 - Josh leaves work in Afternoon""']", SAC,AC
+detect-output/oh-rules/OwnTracks.rules,"['""5 - Josh leaves home""', '""6 - Josh gets to work""']", SAC,AC
+detect-output/oh-rules/OwnTracks.rules,"['""3 - System Start""', '""6 - Josh gets to work""']", WAC,"AC,TC"
+detect-output/oh-rules/OwnTracks.rules,"['""3 - System Start""', '""7 - Josh leaves work in Afternoon""']", WAC,AC
+detect-output/oh-rules/OwnTracks.rules,"['""3 - System Start""', '""5 - Josh leaves home""']", WAC,AC
+detect-output/iotb-rules/HallEntrada.rules,"['""Luz do hall da sala de estar mudou""', '""Luz do hall do quarto de brinquedo mudou""']", STC,AC
+detect-output/iotb-rules/HallEntrada.rules,"['""Luz do hall do quarto de brinquedo mudou""', '""Luz do hall da sala de estar mudou""']", STC,"AC,TC"
+detect-output/iotb-rules/lightscenes.rules,"['""First floor Scene 0 - lights off""', '""FF Actuator 1""']", WAC,AC
+detect-output/iotb-rules/lightscenes.rules,"['""First floor Scene 0 - lights off""', '""CR Actuator 1""']", WAC,"AC,CC"
+detect-output/iotb-rules/lightscenes.rules,"['""First floor Scene 7 - fire alarm""', '""FF Actuator 1""']", WAC,"AC,TC"
+detect-output/iotb-rules/lightscenes.rules,"['""First floor Scene 9 - full alarm""', '""FF Actuator 1""']", WAC,AC
+detect-output/iotb-rules/lightscenes.rules,"['""First floor Scene 0 - lights off""', '""CR Actuator 1""']", WTC,"AC,TC"
+detect-output/iotb-rules/lightscenes.rules,"['""First floor Scene 0 - lights off""', '""CR Actuator 1""']", SCC,"AC,TC"
+detect-output/iotb-rules/lights.rules,"['""Switch lights on at sunset""', '""Switch off GF lights when to bed""']", SAC,"AC,TC"
+detect-output/iotb-rules/lights.rules,"['""Switch lights on at sunset""', '""Switch off indoor lights when to bed""']", SAC,AC
+detect-output/iotb-rules/lights.rules,"['""Switch lights on at sunset""', '""Switch off indoor lights when to bed""']", SAC,AC
+detect-output/iotb-rules/lights.rules,"['""Switch lights on at sunset""', '""Switch off lights when nobody home after midnight""']", WAC,"AC,TC"
+detect-output/iotb-rules/lights.rules,"['""Switch lights on at sunset""', '""Switch off lights when nobody home after midnight""']", WAC,"AC,TC"
+detect-output/iotb-rules/lights.rules,"['""Switch lights on at sunset""', '""Switch off lights when nobody home after midnight""']", WAC,"AC,TC"
+detect-output/iotb-rules/lights.rules,"['""Switch off GF lights when to bed""', '""Switch lights off at sunrise""']", WAC,"AC,TC"
+detect-output/iotb-rules/lights.rules,"['""Switch off GF lights when to bed""', '""Switch lights off at sunrise""']", WAC,"AC,TC"
+detect-output/iotb-rules/Escada.rules,"['""Luz da escada superior mudou""', '""Luz da escada inferior mudou""']", STC,AC
+detect-output/iotb-rules/Escada.rules,"['""Luz da escada inferior mudou""', '""Luz da escada superior mudou""']", STC,AC
+detect-output/iotb-rules/door.rules,"['""r1 - Startup""', '""r2 - ModeChange""']", WTC,"AC,TC"
+detect-output/iotb-rules/door.rules,"['""r1 - Startup""', '""r3 - MorningAction""']", SCC,"AC,TC"
+detect-output/iotb-rules/door.rules,"['""r1 - Startup""', '""r4 - SunsetAction""']", SCC,"AC,TC"
+detect-output/iotb-rules/door.rules,"['""r1 - Startup""', '""r2 - ModeChange""']", WCC,"AC,TC"
+detect-output/iotb-rules/lightonsunset.rules,"['""lights_on_sunset""', '""harmony_off_lights_off""']", WAC,"AC,TC"
+detect-output/iotb-rules/presence.rules,"['""Presence reset at startup""', '""Presence evaluation""']", WAC,AC
+detect-output/iotb-rules/presence.rules,"['""Presence reset at startup""', '""Presence evaluation""']", WAC,AC
+detect-output/iotb-rules/presence.rules,"['""Presence reset at startup""', '""Presence evaluation""']", WAC,AC
+detect-output/iotb-rules/presence.rules,"['""Presence reset at startup""', '""Presence evaluation""']", WAC,AC
+detect-output/iotb-rules/presence.rules,"['""Presence reset at startup""', '""Presence evaluation""']", WAC,AC
+detect-output/iotb-rules/presence.rules,"['""Presence reset at startup""', '""Presence evaluation""']", WAC,AC
+detect-output/iotb-rules/presence.rules,"['""Presence reset at startup""', '""Presence evaluation""']", WAC,AC
+detect-output/iotb-rules/presence.rules,"['""Presence reset at startup""', '""Presence evaluation""']", WAC,AC
+detect-output/iotb-rules/presence.rules,"['""Presence reset at startup""', '""Presence evaluation""']", WAC,AC
+detect-output/iotb-rules/presence.rules,"['""Presence reset at startup""', '""Presence evaluation""']", WAC,AC
+detect-output/iotb-rules/presence.rules,"['""Presence reset at startup""', '""Presence evaluation""']", WAC,AC
+detect-output/iotb-rules/presence.rules,"['""Presence reset at startup""', '""Presence evaluation""']", WAC,AC
+detect-output/iotb-rules/presence.rules,"['""Presence reset at startup""', '""Presence evaluation""']", WAC,AC
+detect-output/iotb-rules/presence.rules,"['""Presence reset at startup""', '""Presence evaluation""']", WAC,AC
+detect-output/iotb-rules/presence.rules,"['""Presence reset at startup""', '""Presence evaluation""']", WAC,AC
+detect-output/iotb-rules/presence.rules,"['""Presence reset at startup""', '""Presence evaluation""']", WAC,AC
+detect-output/iotb-rules/presence.rules,"['""Presence reset at startup""', '""Presence evaluation""']", WAC,AC
+detect-output/iotb-rules/presence.rules,"['""Presence reset at startup""', '""Presence evaluation""']", WAC,AC
+detect-output/iotb-rules/presence.rules,"['""Presence reset at startup""', '""Presence evaluation""']", WAC,AC
+detect-output/iotb-rules/presence.rules,"['""Presence reset at startup""', '""Presence evaluation""']", WAC,AC
+detect-output/iotb-rules/alarm.rules,"['""Alarm reset at startup""', '""Reset all alarms""']", SAC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Reset all alarms""', '""Activate full alarm""']", SAC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Reset all alarms""', '""Activate fire alarm""']", SAC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Reset all alarms""', '""Alarms deactivated""']", SAC,AC
+detect-output/iotb-rules/alarm.rules,"['""Reset all alarms""', '""Alarm sirens mode 1 - sirene setting""']", SAC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Reset all alarms""', '""Alarm sirens mode 2 - sirene setting""']", SAC,AC
+detect-output/iotb-rules/alarm.rules,"['""Reset all alarms""', '""Alarm sirens mode 3 - sirene setting""']", SAC,AC
+detect-output/iotb-rules/alarm.rules,"['""Reset all alarms""', '""Alarm sirens mode 4 - sirene setting""']", SAC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Reset all alarms""', '""Alarm sirens mode 5 - sirene setting""']", SAC,AC
+detect-output/iotb-rules/alarm.rules,"['""Presence after alarm reset""', '""Activate full alarm""']", SAC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Presence after alarm reset""', '""Activate fire alarm""']", SAC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Activate full alarm""', '""Activate fire alarm""']", SAC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Activate full alarm""', '""Activate fire alarm""']", SAC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Activate full alarm""', '""Activate fire alarm""']", SAC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Activate full alarm""', '""Alarms deactivated""']", SAC,AC
+detect-output/iotb-rules/alarm.rules,"['""Activate full alarm""', '""Alarm sirens mode 1 - sirene setting""']", SAC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Activate full alarm""', '""Alarm sirens mode 2 - sirene setting""']", SAC,AC
+detect-output/iotb-rules/alarm.rules,"['""Activate full alarm""', '""Alarm sirens mode 3 - sirene setting""']", SAC,AC
+detect-output/iotb-rules/alarm.rules,"['""Activate full alarm""', '""Alarm sirens mode 4 - sirene setting""']", SAC,AC
+detect-output/iotb-rules/alarm.rules,"['""Activate full alarm""', '""Alarm sirens mode 5 - sirene setting""']", SAC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Activate full alarm""', '""Activate fire alarm""']", SAC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Activate full alarm""', '""Activate fire alarm""']", SAC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Activate fire alarm""', '""Alarms deactivated""']", SAC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Activate fire alarm""', '""Alarm sirens mode 1 - sirene setting""']", SAC,AC
+detect-output/iotb-rules/alarm.rules,"['""Activate fire alarm""', '""Alarm sirens mode 2 - sirene setting""']", SAC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Activate fire alarm""', '""Alarm sirens mode 3 - sirene setting""']", SAC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Activate fire alarm""', '""Alarm sirens mode 4 - sirene setting""']", SAC,AC
+detect-output/iotb-rules/alarm.rules,"['""Activate fire alarm""', '""Alarm sirens mode 5 - sirene setting""']", SAC,AC
+detect-output/iotb-rules/alarm.rules,"['""Reset all alarms""', '""Activate night alarm""']", WAC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Reset all alarms""', '""Auto turn on night alarm""']", WAC,AC
+detect-output/iotb-rules/alarm.rules,"['""Presence after alarm reset""', '""Activate night alarm""']", WAC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Activate full alarm""', '""Activate night alarm""']", WAC,AC
+detect-output/iotb-rules/alarm.rules,"['""Activate full alarm""', '""Activate night alarm""']", WAC,AC
+detect-output/iotb-rules/alarm.rules,"['""Activate full alarm""', '""Activate night alarm""']", WAC,AC
+detect-output/iotb-rules/alarm.rules,"['""Activate full alarm""', '""Activate night alarm""']", WAC,AC
+detect-output/iotb-rules/alarm.rules,"['""Activate night alarm""', '""Activate fire alarm""']", WAC,AC
+detect-output/iotb-rules/alarm.rules,"['""Activate night alarm""', '""Activate fire alarm""']", WAC,AC
+detect-output/iotb-rules/alarm.rules,"['""Activate night alarm""', '""Activate fire alarm""']", WAC,AC
+detect-output/iotb-rules/alarm.rules,"['""Activate night alarm""', '""Alarms deactivated""']", WAC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Activate night alarm""', '""Alarm sirens mode 1 - sirene setting""']", WAC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Activate night alarm""', '""Alarm sirens mode 2 - sirene setting""']", WAC,AC
+detect-output/iotb-rules/alarm.rules,"['""Activate night alarm""', '""Alarm sirens mode 3 - sirene setting""']", WAC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Activate night alarm""', '""Alarm sirens mode 4 - sirene setting""']", WAC,AC
+detect-output/iotb-rules/alarm.rules,"['""Activate night alarm""', '""Alarm sirens mode 5 - sirene setting""']", WAC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Activate night alarm""', '""Activate fire alarm""']", WAC,AC
+detect-output/iotb-rules/alarm.rules,"['""Activate night alarm""', '""Activate fire alarm""']", WAC,AC
+detect-output/iotb-rules/alarm.rules,"['""Reset all alarms""', '""Auto turn on night alarm""']", SCC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Reset all alarms""', '""Auto turn off night alarm""']", WCC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Reset night alarm""', '""Auto turn off night alarm""']", WCC,"AC,TC"
+detect-output/iotb-rules/alarm.rules,"['""Activate night alarm""', '""Auto turn off night alarm""']", WCC,"AC,TC"
+detect-output/iotb-rules/Cafeteira.rules,"['""r2 - A cada uma hora""', '""r3 - Master bedroom alarm time""']", WAC,"AC,TC"
+detect-output/iotb-rules/Cafeteira.rules,"['""r3 - Master bedroom alarm time""', '""r5 - Desligar a cafeteira se ligada fora do horario limite""']", WAC,AC
+detect-output/iotb-rules/manha.rules,"['""Acende luzes de baixo ao acender a escada""', '""Apaga a luz da churrasqueira as 7:00""']", WAC,"AC,TC"
+detect-output/iotb-rules/motion.rules,"['""Front Door opened or closed""', '""Garden Door opened or closed""']", SAC,"AC,TC"
+detect-output/iotb-rules/motion.rules,"['""Front Door opened or closed""', '""Kitchen Door opened or closed""']", SAC,"AC,TC"
+detect-output/iotb-rules/motion.rules,"['""Garden Door opened or closed""', '""Kitchen Door opened or closed""']", SAC,"AC,TC"
+detect-output/iotb-rules/motion.rules,"['""Living room movement""', '""Front Door opened or closed""']", WAC,"AC,TC"
+detect-output/iotb-rules/motion.rules,"['""Living room movement""', '""Garden Door opened or closed""']", WAC,"AC,TC"
+detect-output/iotb-rules/motion.rules,"['""Living room movement""', '""Kitchen Door opened or closed""']", WAC,"AC,TC"
+detect-output/iotb-rules/motion.rules,"['""Living room movement""', '""First floor movement""']", WAC,AC
+detect-output/iotb-rules/motion.rules,"['""Living room movement""', '""Front Door opened or closed""']", WAC,"AC,TC"
+detect-output/iotb-rules/motion.rules,"['""Living room movement""', '""Garden Door opened or closed""']", WAC,"AC,TC"
+detect-output/iotb-rules/motion.rules,"['""Living room movement""', '""Kitchen Door opened or closed""']", WAC,"AC,TC"
+detect-output/iotb-rules/motion.rules,"['""First floor movement""', '""Front Door opened or closed""']", WAC,"AC,TC"
+detect-output/iotb-rules/motion.rules,"['""First floor movement""', '""Garden Door opened or closed""']", WAC,"AC,TC"
+detect-output/iotb-rules/motion.rules,"['""First floor movement""', '""Kitchen Door opened or closed""']", WAC,"AC,TC"
+detect-output/iotb-rules/motion.rules,"['""First floor movement""', '""Front Door opened or closed""']", WAC,"AC,TC"
+detect-output/iotb-rules/motion.rules,"['""First floor movement""', '""Garden Door opened or closed""']", WAC,"AC,TC"
+detect-output/iotb-rules/motion.rules,"['""First floor movement""', '""Kitchen Door opened or closed""']", WAC,"AC,TC"
+detect-output/iotb-rules/Escritorio.rules,"['""Luz da Sala TV 1 superior mudou""', '""Luz da Sala TV 2 superior mudou""']", STC,"AC,TC"
+detect-output/iotb-rules/Escritorio.rules,"['""Luz da Sala TV 2 superior mudou""', '""Luz da Sala TV 1 superior mudou""']", STC,"AC,TC"

@@ -1,0 +1,6 @@
+This is a condition cascade.
+
+Your output should be **TP**. Return nothing else. Just say **TP**.
+
+Here are the rules that cause a condition cascade:
+

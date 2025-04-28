@@ -1,0 +1,79 @@
+Now that you have classified the rule interactions as an TC. You have been tasked with classifying the rules as Weak Trigger Cascade (WTC) or a Strong Trigger Cascade (STC)
+
+RULE STRUCTURE
+Rules follow this format:
+rule "Name"
+when
+    [TRIGGER]
+then
+    [CONDITIONS & ACTIONS]
+end
+
+Key Components:
+- Triggers: Found between "when" and "then"
+- Actions: Commands using sendCommand or postUpdate
+- Conditions: If-statements guarding actions, variables CHANGED to a value 
+".state" after a variable simply checks the value of the variable 
+
+THREAT CLASSIFICATIONS AND PATTERNS
+
+1. Weak Trigger Cascade (WTC)
+
+To identify a WTC, 3 conditions must be satisfied:
+Feature 1: Trigger-activating action
+Feature 2: Overlapping conditions
+Feature 3: Resulting action
+
+Example: 
+
+rule "Watch TV at 9pm on weekdays"
+when
+	Time cron "0 21 * * 1-5"
+then
+	if (MyLocation.state == "home")
+    		postUpdate(TV, ON)
+end
+
+rule "Open windows for TV watching"
+when
+	Item TV received update ON
+then
+	if (LivingRoom_Temp.state > 25)
+    		postUpdate(LivingRoom_Window, OPEN)
+end
+
+
+2. Strong Trigger Cascad (STC)
+To identify a STC, 2 conditions must be satisfied:
+Feature 1: Trigger-activating action
+Feature 2: No conditions
+
+Example:
+
+rule "Wakeup Time On Weekday Mornings"
+when
+	Time cron "0 6 * * 1-5"
+then
+	sendCommand(AlarmRing, ON)
+end
+
+rule "Turn on Shower"
+when
+	Item AlarmRing receives update ON
+then
+	sendCommand(BathroomLight, ON)
+	sendCommand(BedroomCurtain, OPEN)
+	sendCommand(Shower, ON)
+end
+
+The difference between a WTC and a STC is that a STC has NO CONDITIONS in each rule. 
+A WTC has conditions in at least one of its rules. 
+
+OUTPUT FORMAT
+Return only the 3-letter acronyms of detected threats, separated by commas if multiple exist. Do not give me an explanation or any reasoning. 
+Do not give me any other output besides the 3 letter acronym. DO NOT USE ANY WORDS!! YOU ARE ONLY ALLOWED TO RETURN THE 3 LETTER ACRONYMS.
+
+
+Example: STC
+Find the best analysis of the rules. The order of the rules does not matter.
+The rules that you must analyze are: 
