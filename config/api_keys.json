@@ -1,0 +1,7 @@
+{
+  "deepseek_native": {
+    "api_key": "blank",
+    "model": "deepseek-chat",
+    "requests_per_minute": 30
+  }
+}

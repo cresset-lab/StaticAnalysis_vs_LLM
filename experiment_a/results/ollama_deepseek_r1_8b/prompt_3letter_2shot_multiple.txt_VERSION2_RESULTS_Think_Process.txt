@@ -1,0 +1,242 @@
+
+================================================================================
+Rule 1 - Thinking Process
+================================================================================
+First, let's look at the first rule:Fire rule for temperature andAlarm.
+Trigger: Sensor update condition is Item update, condition that and checks temperature >40 for sensor state >  and if sensors members if filter state >50 then setsAlarm true then ifAlarm ON and log etc, setAlarm ON.
+Then rule: trigger is Alarm update condition to turn on.
+
+Now, turn on lights and actions.
+Possibly race: Could fire if temperature is high and alarm trigger and alarm trigger at same time. But both actions are similar and no strong actions but conflicting no.
+
+Also condition or contradiction because temperature high sensor triggers only if condition then. Only if alarm triggers.
+
+Second rule is alarm when alarm on. But alarm on Then condition is not conflicting rule.
+
+Next look at actions:Fire rule setAlarm rule: when triggeredAlarm update turn on lights and send notifications etc. There might conflict but no other.
+
+But both rule no overlapping or cascade condition. Condition.
+
+Another: fire alarm condition is set.
+
+First rule condition.
+
+Check conditions: no conditions.
+
+Perhaps: In temperature condition of temperature rule: temperature rule. When temperature change and alarm condition> then and then alarm on rule on.
+
+Alarm rule.
+
+But alarm rule triggered only if alarm on.
+
+But temperature rule.
+
+Perhaps if two rules can run simultaneously.
+
+But not necessarily.
+
+Not directly.
+
+Weak cascade.
+
+Also condition for condition rule triggers.
+
+First rule.
+
+Not.
+
+Perhaps condition temperature rule set alarm.
+
+alarm on then alarm.
+
+But alarm rule.
+
+Also possible.
+
+Rule temperature.
+
+Similar actions.
+
+Fire rule temperature rule.
+
+Also.
+
+Another one.
+
+Not overlapping conditionalarm only.
+
+alarm rule.
+
+One trigger.
+
+alarm.
+
+No.
+
+Perhaps race condition.
+
+Two triggers.
+
+No.
+
+But temperature rule triggers.
+
+alarm.
+
+Rule1: trigger temperature change then alarm on if high temperature>40.
+Rule: if trigger alarm rule if alarm on on.
+
+If temperature high alarm.
+
+But alarm is true.
+
+If.
+
+Then alarms trigger temperature rule same time.
+
+But actions different.
+
+Not necessarily.
+
+Check condition.
+
+Perhaps.
+
+alarm rule.
+
+Also.
+
+alarm no.
+
+Then.
+
+If temperature.
+
+alarm.
+
+Another.
+
+Perhaps issue.
+
+Let's.
+
+But no.
+
+Rule set.
+
+Temperature condition.
+
+Check again.
+
+alarmrule.
+
+If temperature: condition "Sensor update state change and state.
+
+alarm on.
+
+alarm: alarm.
+
+Rule alarm update.
+
+alarm state.
+
+alarm state on.
+
+alarm.
+
+But rule.
+
+If alarm on.
+
+alarm alarm then.
+
+If alarm on rule.
+
+But alarm.
+
+No conflict.
+
+Rule.
+
+Not.
+
+Another.
+
+alarm.
+
+Temperature.
+
+alarm rule.
+
+Only.
+
+Perhaps.
+
+No.
+
+alarm.
+
+Temperature rule no.
+
+.
+
+Example has condition.
+
+alarm on.
+
+Thenalarm.
+
+Let me see.
+
+alarm.
+
+Also alarm rule.
+
+Other rules.
+
+Example.
+
+Alarm.
+
+alarm rule triggered alarm.
+
+alarmon.
+
+alarm.
+
+Rulealarm.
+================================================================================
+
+
+================================================================================
+Rule 3 - Thinking Process
+================================================================================
+First, let's analyze the rules:
+
+First rule: "uz da salaou\nItem_Luz"
+-TRIGGER: Luzala changed\nTER then
+ACTIONS: Command_gR_quedin_state ( Luz_aLuzTER.toString
+
+No conflict, but not clear.ACTIONS
+
+Second rule: "quarto\nTERrin
+ItemTER_Brinthen
+TER changed
+_CommandED_Luz_sala LuzTRERin_LERin.toString
+Again, butLuzTER. Again different variables. Not a conflict. But similar
+
+Looking at the format. Are they both rules have "Luzala" andLuz" and "ER variables, but different conditions. Possibly both changes. Not overlapping actions. Only if same state change of same state. Also not same. Not condition or action. Also second rule. Not threat.
+
+Rule1:uz da sala: Luzala changed toTER, setTER_stringRule da state. Rule: ER changed setTER. Different states. No. No overlap.
+
+But second rule. Not conditions. Rule1 Example rules don't trigger condition. No race condition same. Not
+
+Rule da rule second second rules trigger. No overlap. Rule first. Rule condition Not actions are not. So not conflict. Second rule. Also check cascade not. Only condition. Rule second action condition. No conflict Not.
+
+Another example rule. No
+
+No threat.
+
+Another rule is. Return empty.
+================================================================================
+
