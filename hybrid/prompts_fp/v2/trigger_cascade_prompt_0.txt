@@ -1,0 +1,12 @@
+You will be given a TRIGGER-ACTION pair along with two interacting openHAB rules. Your task is to evaluate whether the trigger cascade is safe and intended by the user or if it could lead to unexpected or unwanted behavior.
+
+A trigger cascade occurs when an action in one rule triggers another rule, potentially creating a chain reaction. While many trigger cascades are intentional, if the interaction creates an infinite loop or any unintended chain reaction, it is considered a threat.
+
+Use your best judgment:
+- If the interaction creates an infinite loop or any unintended chain reaction, output **TP**.
+- If the interaction creates potentially unwanted or unexpected behaviour, output **TP**
+- If the cascade appears safe and likely intended by the user, output **FP**. (keep in mind that most cascades are likely intended by the user)
+
+Return only the 2-letter acronym (TP or FP) with no additional explanation, reasoning, or text.
+
+The candidate rules and the trigger-action pair that you must analyze are:  

@@ -1,0 +1,62 @@
+An Internet of Things (IoT) safety tool called oHIT has analyzed two openHAB automation rules and has determined that a Strong Condition Cascade (SCC) threat exists. The tool is typically extremely precise.
+
+You are an expert system for verifying whether openHAB rules contain SCC threats. You are tasked with evaluating a candidate pair of IoT rules to determine if they exhibit a SCC threat.
+
+OPENHAB RULE STRUCTURE
+openHAB rules follow this format:
+rule "Name"
+when
+    [TRIGGERS]
+then
+    [CONDITIONS & ACTIONS]
+end
+
+In openHAB, rules are structured using a trigger-condition-action paradigm. Each rule specifies:
+- Triggers: Events or changes (e.g., an Item state change or a scheduled time event) that activate the rule.
+- Conditions: Conditions (typically if-statements) that must be met for the guarded actions to execute; often contain ".state" after an Item to check the value of the Item 
+- Actions: Commands (using the sendCommand or postUpdate syntax) that are send instructions or values to Items to change their state
+
+
+Strong Condition Cascade
+Definition: One rule's action enables conditions in another rule, resulting in potentially unexpected behaviour.
+
+A SCC threat exists if all the following conditions are met:
+
+1. Overlapping Triggers: The triggers from each rule can conceivably be activated simultaneously.
+2. Condition-Enabling Action: An action from one rule directly satisfies all the conditions that safeguard a resulting action in another rule (if there is only 1 condition to satisfy, then this counts as ALL), which could result in potentially unexpected or undesirable behaviour.
+
+Example:
+```
+rule "Initialize Lock Mode for Barn Door"
+when
+    System started
+then
+    sendCommand(BarnDoor_LockMode, 1)
+end
+
+rule "Open Barn Doors for Feeding"
+when
+    Time cron "0 0 8 * * ?"
+then
+    if (BarnDoor_LockMode.state == 1)
+        sendCommand(BarnDoor, OPEN)
+end
+
+Risk: System restart fully enables potentially dangerous operations.
+```
+
+
+OUTPUT FORMAT
+After analyzing these aspects, if the candidate pair meets all the criteria for a SCC threat, output TP. Otherwise, output FP.
+Return only the 2-letter acronym (TP or FP). Do not output an explanation or any reasoning. 
+Do not give me any other output besides the 2-letter acronym. DO NOT USE ANY WORDS!! YOU ARE ONLY ALLOWED TO RETURN THE 2 LETTER ACRONYMS.
+
+Think about your answer before responding. Find the best analysis of the rules. The order of the rules does not matter. 
+You are allowed to give ONLY ONE answer, that answer MUST be the 2-letter acronym. Do NOT give reasoning.
+Pick the answer that is most likely.
+
+Example: TP
+Example: FP
+Do NOT provide multiple answers.
+
+The candidate pair of rules that you must analyze are: 

@@ -1,0 +1,89 @@
+An Internet of Things (IoT) safety tool called oHIT has analyzed two openHAB automation rules and has determined that a WEAK Action Contradiction (WAC) threat exists. The tool is about 90% precise, but has a 10% false positive rate.
+
+You are an expert system for verifying whether openHAB rules contain WAC threats. You are tasked with evaluating a candidate pair of IoT rules to determine if they exhibit a WAC threat.
+
+OPENHAB RULE STRUCTURE  
+openHAB rules follow this format:  
+```
+rule "Name"
+when
+    [TRIGGERS]
+then
+    [CONDITIONS & ACTIONS]
+end
+```  
+In openHAB, rules are structured using a trigger-condition-action paradigm. Each rule specifies:  
+- **Triggers:** Events or changes (e.g., an Item state change or a scheduled time event) that activate the rule.  
+- **Conditions:** If-statements that must be met for the guarded actions to execute; often contain ".state" after an Item to check its value.  
+- **Actions:** Commands (using the sendCommand or postUpdate syntax) that send instructions or values to Items to change their state.
+
+WEAK ACTION CONTRADICTIONS (WAC)  
+Definition: A WAC threat exists when two rules have conflicting actions that could potentially fire at the same time, creating a race condition. A WAC threat is present if all the following conditions are met:  
+- **Overlapping Triggers:** The triggers from each rule can conceivably be activated simultaneously.  
+- **Conflicting Actions:** At least one action in one rule directly contradicts an action in the other rule (i.e., they send conflicting commands or values to the same Item).  
+- **Guarding Conditions:** There is at least one condition guarding at least one of the relevant conflicting actions.
+
+EXAMPLE:
+```
+rule "Activate night alarm"
+when
+	Item cAlarmActivation_Night changed to OPEN
+then
+	// It should be nighttime for this alarm to do anything
+	if (sNight.state == ON) {
+
+		// Set presence status
+		postUpdate(nStatus_Presence, ALARM)
+		
+		// Register last alarm
+		logInfo("Alarm", "Night alarm activated.")
+		postUpdate(tLastAlarmTime_Night,new DateTimeType())
+		postUpdate(tLastAlarmTime,new DateTimeType())
+		postUpdate(strLastAlarmType,"Nachtalarm")
+		
+		// Activate sirens and strobes
+		sendCommand(nSirens_GeneralMode, NIGHTALARM)
+
+		// Turn on lights
+		sendCommand(nScene_GF_Lights, NIGHTALARM)
+		sendCommand(nScene_FF_Lights, NIGHTALARM)
+	}
+	else {
+		// Deactivate if not nighttime
+		postUpdate(cAlarmActivation_Night, CLOSED)
+		logInfo("Alarm", "Night alarm triggered but automatically reset because it is daytime.")
+	}
+end
+
+
+rule "Alarm sirens mode 1 - sirene setting"
+when
+	Item nSirens_GeneralMode received command 1
+then
+	// Set all sirens to sound & strobe for 60s
+	sendCommand(nSiren_01_Mode, 0)
+	sendCommand(nSiren_01_Duration, 1)
+	sendCommand(nSirens_GeneralMode, SIRENSOFF) 
+end
+
+Thought process:
+- Overlapping triggers: cAlarmActivation_Night could change to open at the same time that nSirens_GeneralMode receives command 1
+- Conflicting actions: nSirens_GeneralMode receive command "SIRENSOFF" in one rule, and "NIGHTALARM" in another
+- Guarding conditions: One of the conflicting actions, "sendCommand(nSirens_GeneralMode, NIGHTALARM)", is guarded by the condition "if (sNight.state == ON)"
+- Race condition or undesirable behaviour: IF OVERLAPPING SETS OF TRIGGERS AND CONDITIONS ARE CONCURRENTLY ACTIVATED, CONTRADICTORY ACTION EXECUTION COULD OCCUR IN ANY ORDER, WHICH MAY RESULT IN AN INDETERMINATE DEVICE STATE.
+
+Classification: A WAC exists, so output TP
+```
+
+TIPS & HINTS  
+oHIT may sometimes produce false positives by assuming that triggers on differently named Items (e.g., "sunrise_event" versus "sunset_event") are overlapping, even though those events cannot occur simultaneously.
+
+OUTPUT FORMAT  
+After analyzing these aspects, if the candidate pair meets all the criteria for a WAC threat, output **TP**. Otherwise, output **FP**.  
+Return only the 2-letter acronym (TP or FP). Do not output any explanation or reasoning. DO NOT USE ANY WORDS!! YOU ARE ONLY ALLOWED TO RETURN THE 2 LETTER ACRONYMS.
+
+Think carefully before responding. Analyze the rules thoroughly—the order of the rules does not matter.  
+You are allowed to give ONLY ONE answer, and that answer MUST be the 2-letter acronym. Do NOT provide multiple answers or any reasoning.
+
+The candidate pair of rules that you must analyze are:  
+

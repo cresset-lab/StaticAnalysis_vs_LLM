@@ -1,0 +1,67 @@
+An Internet of Things (IoT) safety tool called oHIT has analyzed two openHAB automation rules and has determined that a WEAK Trigger Cascade (WTC) threat exists. The tool is about 50% precise, and has a 50% false positive rate.
+
+You are an expert system for verifying whether openHAB rules contain WTC threats. You are tasked with evaluating a candidate pair of IoT rules to determine if they exhibit a WTC threat.
+
+OPENHAB RULE STRUCTURE
+openHAB rules follow this format:
+rule "Name"
+when
+    [TRIGGERS]
+then
+    [CONDITIONS & ACTIONS]
+end
+
+In openHAB, rules are structured using a trigger-condition-action paradigm. Each rule specifies:
+- Triggers: Events or changes (e.g., an Item state change or a scheduled time event) that activate the rule.
+- Conditions: Conditions (typically if-statements) that must be met for the guarded actions to execute; often contain ".state" after an Item to check the value of the Item 
+- Actions: Commands (using the sendCommand or postUpdate syntax) that are send instructions or values to Items to change their state
+
+
+WEAK Trigger Cascade
+Definition: When one rule's action triggers another rule's execution, resulting in potentially unexpected behaviour.
+
+A WTC threat exists if all the following conditions are met:
+
+1. Trigger-Action Pair: The action from one rule directly activates the trigger of another rule.
+2. Resulting Action: There exists an action in the rule that just got triggered by the first action, and potentially unexpected behaviour could occur.
+3. Guarding Conditions: There is at least 1 condition directly guarding either (or both) the triggering action or the resulting action.
+
+Example:
+```
+rule "Watch TV at 9pm on weekdays"
+when
+    Time cron "0 21 * * 1-5"
+then
+    if (MyLocation.state == "home")
+        postUpdate(TV, ON)
+end
+
+rule "Open windows for TV watching"
+when
+    Item TV received update ON
+then
+    if (LivingRoom_Temp.state > 25)
+        postUpdate(LivingRoom_Window, OPEN)
+end
+
+Risk: Unintended window operation when TV turns on automatically.
+```
+
+Tips & Hints
+A common reason that oHIT produces false positives for WTC threats is that the resulting behaviour is actually desired by the user. oHIT can only rigidly detect the WTC pattern, it cannot understand the greater context of the rules. Often a user designs their rules intentionally to trigger each other to create a desired behaviour. When you're classifying this as a true or false positive, try to understand if unexpected or undesirable behaviour could occur, or if the user likely intended this behaviour.
+
+
+OUTPUT FORMAT
+After analyzing these aspects, if the candidate pair meets all the criteria for a WTC threat, output TP. Otherwise, output FP.
+Return only the 2-letter acronym (TP or FP). Do not output an explanation or any reasoning. 
+Do not give me any other output besides the 2-letter acronym. DO NOT USE ANY WORDS!! YOU ARE ONLY ALLOWED TO RETURN THE 2 LETTER ACRONYMS.
+
+Think about your answer before responding. Find the best analysis of the rules. The order of the rules does not matter. 
+You are allowed to give ONLY ONE answer, that answer MUST be the 2-letter acronym. Do NOT give reasoning.
+Pick the answer that is most likely.
+
+Example: TP
+Example: FP
+Do NOT provide multiple answers.
+
+The candidate pair of rules that you must analyze are: 

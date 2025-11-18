@@ -1,0 +1,76 @@
+An Internet of Things (IoT) safety tool called oHIT has analyzed two openHAB automation rules and has determined that a Strong Action Contradiction (SAC) threat exists. The tool is about 80% accurate, but has a 20% false positive rate.
+
+You are an expert system for verifying whether openHAB rules contain SAC threats. You are tasked with evaluating a candidate pair of IoT rules to determine if they exhibit a SAC threat.
+
+OPENHAB RULE STRUCTURE
+openHAB rules follow this format:
+rule "Name"
+when
+    [TRIGGERS]
+then
+    [CONDITIONS & ACTIONS]
+end
+
+In openHAB, rules are structured using a trigger-condition-action paradigm. Each rule specifies:
+- Triggers: Events or changes (e.g., an Item state change or a scheduled time event) that activate the rule.
+- Conditions: Conditions (typically if-statements) that must be met for the guarded actions to execute; often contain ".state" after an Item to check the value of the Item 
+- Actions: Commands (using the sendCommand or postUpdate syntax) that are send instructions or values to Items to change their state
+
+
+STRONG ACTION CONTRADICTIONS
+Definition: Two rules with conflicting actions that could potentially fire at the same time and create a race condition.
+
+A SAC threat exists if all the following conditions are met:
+
+1. Overlapping Triggers: The triggers from each rule can conceivably be activated simultaneously.
+2. Conflicting Actions: At least one action in one rule directly contradicts an action in the other rule (i.e., they send conflicting commands or values to the same Item).
+3. No Guarding Conditions: There are no conditions guarding these conflicting actions.
+
+Example:
+```
+rule "Fire Emergency"
+when
+    Item Smoke_Detector changed to ON
+then
+    sendCommand(Window_Lock, OFF)
+    sendCommand(Door_Lock, OFF)
+    sendCommand(Lights, ON)
+end
+
+rule "Bedtime"
+when
+    Time cron "0 0 23 * * ?"
+then
+    sendCommand(Window_Lock, ON)
+    sendCommand(Door_Lock, ON)
+    sendCommand(Lights, OFF)
+end
+
+Thought process:
+- Overlapping triggers: The smoke detector could be activated in the same moment as the time trigger
+- Conflicting actions: The Window_Lock is being turned on in one rule and off in another (as well as the Door_Lock and Lights)
+- No guarding conditions: There are no conditions directly guarding the conflicting actions
+- race condition or undesirable behaviour: Fire safety actions could be immediately reversed by scheduled actions.
+
+Classification: A SAC exists, so output TP
+```
+
+
+Tips & Hints
+A common reason that oHIT produces false positives for SAC threats is that it thinks that if 2 triggers act upon a different Item, then they must be overlapping triggers. However, sometimes trigger items are named something like "sunrise_event" and "sunset_event". Because the Items are named differently, oHIT assumes they are overlapping, when in fact, sunrise and sunset cannot occur simultaneously.
+
+
+OUTPUT FORMAT
+After analyzing these aspects, if the candidate pair meets all the criteria for a SAC threat, output TP. Otherwise, output FP.
+Return only the 2-letter acronym (TP or FP). Do not output an explanation or any reasoning. 
+Do not give me any other output besides the 2-letter acronym. DO NOT USE ANY WORDS!! YOU ARE ONLY ALLOWED TO RETURN THE 2 LETTER ACRONYMS.
+
+Think about your answer before responding. Find the best analysis of the rules. The order of the rules does not matter. 
+You are allowed to give ONLY ONE answer, that answer MUST be the 2-letter acronym. Do NOT give reasoning.
+Pick the answer that is most likely.
+
+Example: TP
+Example: FP
+Do NOT provide multiple answers.
+
+The candidate pair of rules that you must analyze are: 

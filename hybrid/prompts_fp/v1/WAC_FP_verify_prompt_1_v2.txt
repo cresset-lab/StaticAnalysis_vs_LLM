@@ -1,0 +1,66 @@
+An Internet of Things (IoT) safety tool called oHIT has analyzed two openHAB automation rules and has determined that a WEAK Action Contradiction (WAC) threat exists. The tool is about 90% precise, but has a 10% false positive rate.
+
+You are an expert system for verifying whether openHAB rules contain WAC threats. You are tasked with evaluating a candidate pair of IoT rules to determine if they exhibit a WAC threat.
+
+OPENHAB RULE STRUCTURE  
+openHAB rules follow this format:  
+```
+rule "Name"
+when
+    [TRIGGERS]
+then
+    [CONDITIONS & ACTIONS]
+end
+```  
+In openHAB, rules are structured using a trigger-condition-action paradigm. Each rule specifies:  
+- **Triggers:** Events or changes (e.g., an Item state change or a scheduled time event) that activate the rule.  
+- **Conditions:** If-statements that must be met for the guarded actions to execute; often contain ".state" after an Item to check its value.  
+- **Actions:** Commands (using the sendCommand or postUpdate syntax) that send instructions or values to Items to change their state.
+
+WEAK ACTION CONTRADICTIONS (WAC)  
+Definition: A WAC threat exists when two rules have conflicting actions that could potentially fire at the same time, creating a race condition. A WAC threat is present if all the following conditions are met:  
+- **Overlapping Triggers:** The triggers from each rule can conceivably be activated simultaneously.  
+- **Conflicting Actions:** At least one action in one rule directly contradicts an action in the other rule (i.e., they send conflicting commands or values to the same Item).  
+- **Guarding Conditions:** There is at least one condition guarding at least one of the relevant conflicting actions.
+
+EXAMPLE:
+```
+rule "Carbon Monoxide Alert"
+when
+    Item CO_Detector changes to ON
+then
+    sendCommand(Windows, OPEN)
+    sendCommand(Fans, ON)
+end
+
+rule "Potential Security Threat Detected"
+when
+    Item OutdoorSecurityCamera_Motion changed to ON
+then
+    if (Security_Mode == ON) {
+        sendCommand(Windows, CLOSE)
+        sendCommand(DoorLock, ON)
+    }
+end
+
+Thought process:
+- Overlapping triggers: The CO_detector could be activated in the same moment as the OutdoorSecurityCamera_Motion sensor
+- Conflicting actions: The Windows are being closed in one rule and open in another
+- Guarding conditions: One of the conflicting actions, "sendCommand(Windows, CLOSE)", is guarded by the condition "if (Security_Mode == ON)"
+- Race condition or undesirable behaviour: If CO is detected and motion triggers simultaneously, the windows may close when they need to stay open.
+
+Classification: A WAC exists, so output TP
+```
+
+TIPS & HINTS  
+oHIT may sometimes produce false positives by assuming that triggers on differently named Items (e.g., "sunrise_event" versus "sunset_event") are overlapping, even though those events cannot occur simultaneously.
+
+OUTPUT FORMAT  
+After analyzing these aspects, if the candidate pair meets all the criteria for a WAC threat, output **TP**. Otherwise, output **FP**.  
+Return only the 2-letter acronym (TP or FP). Do not output any explanation or reasoning. DO NOT USE ANY WORDS!! YOU ARE ONLY ALLOWED TO RETURN THE 2 LETTER ACRONYMS.
+
+Think carefully before responding. Analyze the rules thoroughly—the order of the rules does not matter.  
+You are allowed to give ONLY ONE answer, and that answer MUST be the 2-letter acronym. Do NOT provide multiple answers or any reasoning.
+
+The candidate pair of rules that you must analyze are:  
+

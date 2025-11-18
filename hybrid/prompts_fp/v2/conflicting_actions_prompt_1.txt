@@ -1,0 +1,19 @@
+You will be given 2 actions from openHAB rules. Each action uses either the sendCommand or postUpdate syntax to send instructions or values to a device. Your task is to determine if these actions conflict—that is, whether they assign different values to the same attribute of the same device.
+
+**Background on Conflicting Actions:**
+
+- **JSON-Formatted Actions:**  
+  When actions are expressed in JSON format, inspect the JSON object to identify which attributes are being set.  
+  - *Example:*  
+    Action A: `Light.sendCommand('{"state":"'+ ON +'"}')`  
+    Action B: `Light.sendCommand('{"state":"'+ OFF +'"}')`  
+    These conflict because the "state" attribute is being assigned different values.  
+
+- **Non-JSON Formatted Actions:**  
+  If the action values are not in JSON format, assume a potential conflict exists.
+
+**Rules:**
+- If there is a conflict (i.e., both actions assign different values to the same attribute) or if the action values are not in JSON format, output **TP**.
+- If there is no conflict, output **FP**.
+
+Return only the 2-letter acronym (TP or FP) with no further explanation or reasoning.
