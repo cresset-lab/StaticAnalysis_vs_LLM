@@ -9,6 +9,9 @@ Welcome to the official repository for **StaticAnalysis_vs_LLM**, containing the
 
 As smart home ecosystems and IoT environments become more complex, independent automation rules can inadvertently collide, creating Rule Interaction Threats (RITs) that pose serious safety risks. This project investigates the limitations of both traditional Static Analysis and modern Large Language Models (LLMs) in detecting these threats, and introduces a novel **Neuro-Symbolic Hybrid Architecture** to reconcile the two. 
 
+<img width="589" height="486" alt="Screenshot 2026-03-28 at 2 14 48 PM" src="https://github.com/user-attachments/assets/925ae929-8f66-4abf-a4c9-9f24d6d99356" />
+
+
 ## ⚠️ The Challenge
 
 Rule Interaction Threats (RITs) are generally classified into Action Contradictions (AC), Trigger Cascades (TC), and Condition Cascades (CC). Detecting these requires an understanding of both rigid code structure and human intent. 
