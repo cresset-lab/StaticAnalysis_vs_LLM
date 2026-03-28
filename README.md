@@ -1,5 +1,4 @@
-# Trustworthy IoT Security Analytics: Bridging Symbolic Reasoning and Generative AI
-
+# Cracking IoT Security: Can LLMs Outsmart Static Analysis Tools?
 [![Accepted in EMSE](https://img.shields.io/badge/Status-Accepted_in_EMSE-brightgreen.svg)]()
 [![Lab](https://img.shields.io/badge/Lab-CRESSET-blue.svg)]()
 
